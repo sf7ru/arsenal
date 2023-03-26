@@ -14,9 +14,9 @@
 #ifndef __HALPLATFORMDEFS_H__
 #define __HALPLATFORMDEFS_H__
 
-#include <stm32f7xx_hal.h>
-#include <stm32f7xx_hal_spi.h>
-#include <stm32f7xx_ll_gpio.h>
+#include "stm32f7xx_hal.h"
+#include "stm32f7xx_hal_spi.h"
+#include "stm32f7xx_ll_gpio.h"
 #include <stm32f7xx_ll_rcc.h>
 #include <system_stm32f7xx.h>
 #include <stm32f7xx_hal_iwdg.h>
