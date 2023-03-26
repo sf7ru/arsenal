@@ -1,0 +1,39 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= mathlib@arsenal/beans
+
+BEAN_DEPEND	:= 
+
+BEAN_FILES	:= 	\
+choleski.c		\
+copy_vector.c		\
+declination.cpp		\
+get_submatrix.c		\
+hessenberg_elementary.c	\
+identity_matrix.c	\
+igrfdata.inc		\
+interchange_cols.c	\
+interchange_rows.c	\
+lower_triangular.c	\
+LowPassFilter2p.cpp	\
+multiply_matrices.c	\
+multiply_self_transpose.c	\
+qr_hessenberg_matrix.c		\
+transpose_square_matrix.c	\
+upper_triangular.c		\
+calibration_routines.c		\
+modp_numtoa.c			\
+
+
+include $(PATH_MAKEFILES)/Castfile

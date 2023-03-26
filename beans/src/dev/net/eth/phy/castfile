@@ -1,0 +1,23 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= dev/net/eth/phy@arsenal/beans
+
+BEAN_DEPEND	:= dev/net/eth@arsenal/beans
+
+
+BEAN_FILES	:=	\
+
+
+
+include $(PATH_MAKEFILES)/Castfile

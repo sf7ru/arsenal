@@ -1,0 +1,26 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= dev/display@arsenal/beans
+
+BEAN_DEPEND	:=	
+
+BEAN_FILES	:=	\
+Display.cpp		\
+Display1bit.cpp		\
+Display1bitTilted.cpp		\
+Display4bit.cpp		\
+
+
+include $(PATH_MAKEFILES)/Castfile
+

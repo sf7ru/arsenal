@@ -1,0 +1,23 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= dev/display/ssd1327/i2c@arsenal/beans
+
+BEAN_DEPEND	:=	
+
+BEAN_FILES	:=	\
+DisplaySsd1327i2c.cpp	\
+
+
+include $(PATH_MAKEFILES)/Castfile
+

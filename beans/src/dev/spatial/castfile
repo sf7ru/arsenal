@@ -1,0 +1,24 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= dev/spatial@arsenal/beans
+
+BEAN_DEPEND	:= mathlib@arsenal/beans
+
+BEAN_FILES	:=	\
+SpatialSensor.cpp	\
+MagnetoCalibration.cpp	\
+OrbCalibration.cpp	\
+
+
+include $(PATH_MAKEFILES)/Castfile

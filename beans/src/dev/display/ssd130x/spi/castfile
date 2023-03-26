@@ -1,0 +1,25 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= dev/display/ssd130x/spi@arsenal/beans
+
+BEAN_DEPEND	:=			\
+dev/display/ssd130x@arsenal/beans	\
+
+
+BEAN_FILES	:=	\
+DisplaySsd130xSpi.cpp	\
+
+
+include $(PATH_MAKEFILES)/Castfile
+

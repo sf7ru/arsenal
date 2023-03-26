@@ -1,0 +1,23 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= dev/display/ssd1305/para@arsenal/beans
+
+BEAN_DEPEND	:= dev/display/ssd1305@arsenal/beans
+
+BEAN_FILES	:=	\
+DisplaySsd1305Para.cpp	\
+
+
+include $(PATH_MAKEFILES)/Castfile
+

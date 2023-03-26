@@ -1,0 +1,26 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= freertos10/lpc176x@arsenal/beans
+
+BEAN_DEPEND	:= freertos10@arsenal/beans
+
+BEAN_FILES	:=	\
+port.c			\
+heap_4.c		\
+FreeRTOSCommonHooks.c	\
+
+#bebe = FreeRTOSCommonHooks.c	\
+
+
+include $(PATH_MAKEFILES)/Castfile

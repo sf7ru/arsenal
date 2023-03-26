@@ -1,0 +1,22 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= freertos10/cmsis_os@arsenal/beans
+
+BEAN_DEPEND	:= 
+
+BEAN_FILES	:=	\
+cmsis_os.c		\
+
+
+include $(PATH_MAKEFILES)/Castfile

@@ -1,0 +1,98 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= lwip@arsenal/beans
+
+BEAN_DEPEND	:= freertos10/cmsis_os@arsenal/beans
+
+
+BEAN_FILES	:= 	\
+netif/ppp/lcp.c \
+netif/ppp/ccp.c \
+netif/ppp/pppcrypt.c \
+netif/ppp/vj.c \
+netif/ppp/auth.c \
+netif/ppp/utils.c \
+netif/ppp/mppe.c \
+netif/ppp/eui64.c \
+netif/ppp/upap.c \
+netif/ppp/ecp.c \
+netif/ppp/chap-new.c \
+netif/ppp/chap-md5.c \
+netif/ppp/chap_ms.c \
+netif/ppp/ipv6cp.c \
+netif/ppp/pppoe.c \
+netif/ppp/eap.c \
+netif/ppp/pppol2tp.c \
+netif/ppp/magic.c \
+netif/ppp/ipcp.c \
+netif/ppp/multilink.c \
+netif/ppp/ppp.c \
+netif/ppp/fsm.c \
+netif/ppp/demand.c \
+netif/ppp/pppapi.c \
+netif/ppp/pppos.c \
+netif/ethernet.c \
+netif/ethernetif_template.c \
+netif/lowpan6.c \
+netif/slipif.c \
+core/ipv6/inet6.c \
+core/ipv6/ethip6.c \
+core/ipv6/dhcp6.c \
+core/ipv6/mld6.c \
+core/ipv6/icmp6.c \
+core/ipv6/nd6.c \
+core/ipv6/ip6_frag.c \
+core/ipv6/ip6.c \
+core/ipv6/ip6_addr.c \
+core/dns.c \
+core/netif.c \
+core/memp.c \
+core/udp.c \
+core/ipv4/ip4_frag.c \
+core/ipv4/autoip.c \
+core/ipv4/ip4_addr.c \
+core/ipv4/dhcp.c \
+core/ipv4/igmp.c \
+core/ipv4/etharp.c \
+core/ipv4/ip4.c \
+core/ipv4/icmp.c \
+core/mem.c \
+core/sys.c \
+core/tcp.c \
+core/tcp_out.c \
+core/tcp_in.c \
+core/ip.c \
+core/inet_chksum.c \
+core/raw.c \
+core/pbuf.c \
+core/timeouts.c \
+core/def.c \
+core/stats.c \
+core/init.c \
+apps/mqtt/mqtt.c \
+api/api_lib.c \
+api/sockets.c \
+api/netdb.c \
+api/netifapi.c \
+api/tcpip.c \
+api/err.c \
+api/api_msg.c \
+api/netbuf.c \
+axsocket.c	\
+axssocket.c	\
+axsocket_peer.c	\
+
+
+
+include $(PATH_MAKEFILES)/Castfile

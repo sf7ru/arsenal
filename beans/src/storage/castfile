@@ -1,0 +1,24 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= storage@arsenal/beans
+
+BEAN_DEPEND	:= 
+
+BEAN_FILES	:=	\
+FlashStorageFile.cpp	\
+Storage.cpp		\
+StorageRecords.cpp	\
+StorageBlocks.cpp	\
+
+include $(PATH_MAKEFILES)/Castfile

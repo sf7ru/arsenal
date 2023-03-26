@@ -1,0 +1,29 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= freertos10@arsenal/beans
+
+BEAN_DEPEND	:= 
+
+BEAN_FILES	:=	\
+croutine.c		\
+event_groups.c		\
+list.c			\
+queue.c			\
+stream_buffer.c		\
+tasks.c			\
+timers.c		\
+port_common.c	\
+
+
+include $(PATH_MAKEFILES)/Castfile
