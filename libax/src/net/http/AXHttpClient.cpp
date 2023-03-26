@@ -21,7 +21,8 @@
 #include <arsenal/libax/src/net/http/http.agi>
 #include <string.h>
 
-//#define AXTRACE printf
+// #undef AXTRACE
+// #define AXTRACE printf
 
 // ---------------------------------------------------------------------------
 // -------------------------------- FUNCTIONS --------------------------------

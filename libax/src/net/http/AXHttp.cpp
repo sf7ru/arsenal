@@ -282,6 +282,8 @@ HTTPRC AXHttp::sendBody(AXHttpReq *   req,
         if (  (req->loadData(req->dataOffset, (PVOID)buff.getData(), amount))    &&
               (buff.write(NULL, amount, TO) > 0)            )
         {
+            //printf("BODY: %s\n", (PSTR)buff.getData());
+
             left        -= amount;
             req->dataOffset += amount;
         }

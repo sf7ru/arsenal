@@ -260,7 +260,7 @@ INT AXBuffer::gets(UINT           TO)
             strEnd  = STR_MAX;
             result  = 1;
         }
-        else if ((rd = dev->read(buffData + used, STR_MAX - used, TO)) > 0)
+        else if ((rd = dev ? dev->read(buffData + used, STR_MAX - used, TO) : 0) > 0)
         {
 //            *(buffData + used + rd) = 0;
 //            printf("%s", buffData + used);
@@ -293,34 +293,36 @@ void AXBuffer::echo(UINT           size,
     INT     left;
     BOOL    ok;
 
-    switch (echoMode)
+    if (dev)
     {
-        case 0:
-            break;
+        switch (echoMode)
+        {
+            case 0:
+                break;
 
-        case 1:
-            dev->write(on, size, TO);
-            break;
+            case 1:
+                dev->write(on, size, TO);
+                break;
 
-        default:
-            for (left = size, ok = true; ok && left; left--, on++)
-            {
-                ok = dev->write(on, 1, TO) > 0;
-
-                if (eol1 && ok && (*on == eol1))
+            default:
+                for (left = size, ok = true; ok && left; left--, on++)
                 {
-                    dev->write(&eol2, 1, TO);
-                }
-            }
-            break;
-    }
+                    ok = dev->write(on, 1, TO) > 0;
 
+                    if (eol1 && ok && (*on == eol1))
+                    {
+                        dev->write(&eol2, 1, TO);
+                    }
+                }
+                break;
+        }
+    }
 }
 INT AXBuffer::readDevice(UINT           TO)
 {
     INT     result      = 0;
 
-    if ((buffSize - used) > 0)
+    if (dev && ((buffSize - used) > 0))
     {
         if ((result = dev->read(buffData + used, buffSize - used, TO)) > 0)
         {
@@ -348,7 +350,7 @@ INT AXBuffer::readDevice(UINT           TO)
 INT AXBuffer::read(UINT           TO,
                    INT            size)
 {
-    shake();
+    shake(); 
 
     return (INT)used > size ? used : readDevice(TO);
 }
@@ -402,7 +404,8 @@ INT AXBuffer::write(PCVOID          data,
 //    strz_dump_w_txt("WRITE: ", (PVOID)data, size);
 //        printf("WRITE: '%s'\n", data);
 
-    result = dev->write(data ? data : buffData, size, TO);
+    if (dev)
+        result = dev->write(data ? data : buffData, size, TO);
 
     return result;
 }
@@ -458,4 +461,20 @@ BOOL AXBuffer::_realloc(UINT       size)
         result = true;
 
     RETURN(result);
+}
+INT AXBuffer::push(PVOID     data, 
+                   INT       size)
+{
+    INT         result      = 0;
+    INT         avail;
+
+    if ((avail = (buffSize - used)) > 0)
+    {
+        result = MAC_MIN(avail, size);
+        memcpy(buffData + used, data, result);
+
+        used += result;
+    }
+
+    return result;
 }

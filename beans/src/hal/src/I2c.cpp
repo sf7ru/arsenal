@@ -92,10 +92,12 @@ int  I2c::probeSlaves()
                 MAC_DEVICE(0x1B, "DS2482");
                 MAC_DEVICE(0x1D, "LSM303");
                 MAC_DEVICE(0x1E, "FXOS8700CQ");
-                MAC_DEVICE(0x20, "FXAS21002CQ");
+                MAC_DEVICE(0x20, "FXAS21002CQ, TCA95x5");
                 MAC_DEVICE(0x29, "BNO055");
-                MAC_DEVICE(0x48, "LM75");
+                MAC_DEVICE(0x48, "LM75, ADS1115");
+                MAC_DEVICE(0x49, "ADS1115(2) ");
                 MAC_DEVICE(0x50, "AT24");
+                MAC_DEVICE(0x5F, "KSZ9896/7");
                 MAC_DEVICE(0x68, "DS1307/MPU6050/BMI088");
                 MAC_DEVICE(0x69, "MPU6050/BMI088");
                 

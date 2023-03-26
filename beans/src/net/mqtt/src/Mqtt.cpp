@@ -15,7 +15,6 @@
 #include <string.h>
 #include <stdio.h>
 
-
 // ---------------------------------------------------------------------------
 // ------------------------------- DEFINITIONS -------------------------------
 // -----|-------------------|-------------------------------------------------
@@ -102,7 +101,9 @@ BOOL Mqtt::_connect(UINT           TO)
         memcpy(&payload[2],clientid,strlen(clientid));
 
         // fixed header: 2 bytes, big endian
-        U8 fixed_header[] = { SET_MESSAGE(CONNECT), sizeof(var_header)+sizeof(payload) };
+        U8 fixed_header[] = { SET_MESSAGE(CONNECT), U8(sizeof(var_header)+sizeof(payload)) };
+//        printf("fixed_header[] = %X %X\n", fixed_header[0], fixed_header[1]);
+        
 //      fixed_header_t  fixed_header = { .QoS = 0, .connect_msg_t = CONNECT, .remaining_length = sizeof(var_header)+strlen(broker->clientid) };
 
         U8 packet[sizeof(fixed_header)+sizeof(var_header)+sizeof(payload)];
@@ -116,16 +117,24 @@ BOOL Mqtt::_connect(UINT           TO)
         if (axdev_write(sock, packet, sizeof(packet), TO) == (INT)sizeof(packet))
         {
             U8 buffer[4];
+            // It's OK read here
             long sz = axdev_read(sock, buffer, sizeof(buffer), TO);  // wait for CONNACK
-//                    printf("buffer size is %ld\n",sz);
-//                    printf("%2x:%2x:%2x:%2x\n",(U8)buffer[0],(U8)buffer[1],(U8)buffer[2],(U8)buffer[3]);
+                    // printf("_connect buffer size is %ld\n",sz);
+                    // printf("%2x:%2x:%2x:%2x\n",(U8)buffer[0],(U8)buffer[1],(U8)buffer[2],(U8)buffer[3]);
 
-            if ( (GET_MESSAGE(buffer[0]) == CONNACK) && ((sz-2)==buffer[1]) && (buffer[3] == Connection_Accepted) )
+            if (sz > 0)
             {
-                //printf("Connected to MQTT Server at %s:%4d\n",server_ip, port );
+                if ( (GET_MESSAGE(buffer[0]) == CONNACK) && ((sz-2)==buffer[1]) && (buffer[3] == Connection_Accepted) )
+                {
+//                    printf("-- Connected to MQTT Server at %s:%4d\n",server_ip, port );
 
-                lastKA      = axtime_get_monotonic();
-                result      = true;
+                    wrapper->setDev(sock);
+                    
+                    lastKA      = axtime_get_monotonic();
+                    result      = true;
+                }
+                else
+                    disconnect();
             }
             else
                 disconnect();
@@ -155,237 +164,360 @@ BOOL Mqtt::connect(PCSTR          client,
     strz_cpy(this->server_ip, server_ip, sizeof(this->server_ip));
     strz_cpy(this->clientid, client, sizeof(this->clientid));
 
-    result = _connect(TO);
-
-    RETURN(result);
-}
-BOOL Mqtt::_subscribe(UINT           TO)
-{
-    BOOL        result          = false;
-
-    ENTER(true);
-
-    if (sock && !topicLen)
+    if (_connect(TO))
     {
-        U8 var_header[] = { MSB(MESSAGE_ID), LSB(MESSAGE_ID) };    // appended to end of PUBLISH message
-
-        // utf topic
-        U8 utf_topic[2 + strlen(subscription) + 1]; // 2 for message size + 1 for QoS
-
-        // set up topic payload
-        utf_topic[0] = 0;                       // MSB(strlen(topic));
-        utf_topic[1] = LSB(strlen(subscription));
-        memcpy((char *) &utf_topic[2], subscription, strlen(subscription));
-        utf_topic[sizeof(utf_topic) - 1] = subscriptionQoS;
-
-        U8 fixed_header[] = { SET_MESSAGE(SUBSCRIBE), sizeof(var_header) + sizeof(utf_topic) };
-        //    fixed_header_t  fixed_header = { .QoS = 0, .connect_msg_t = SUBSCRIBE, .remaining_length = sizeof(var_header)+strlen(utf_topic) };
-
-        U8 packet[sizeof(fixed_header) + sizeof(var_header) + sizeof(utf_topic)];
-
-        memset(packet, 0, sizeof(packet));
-        memcpy(packet, &fixed_header, sizeof(fixed_header));
-        memcpy(packet + sizeof(fixed_header), var_header, sizeof(var_header));
-        memcpy(packet + sizeof(fixed_header) + sizeof(var_header), utf_topic, sizeof(utf_topic));
-
-        if (axdev_write(sock, packet, sizeof(packet), TO) == (INT)sizeof(packet))
+        if ((wrapper = new PAXDEVWrapper(sock)) != nil)
         {
-            U8   buffer[5];
-            long sz = axdev_read(sock, buffer, sizeof(buffer), TO);  // wait for SUBACK
-
-            //    printf("buffer size is %ld\n",sz);
-            //    printf("%2x:%2x:%2x:%2x:%2x\n",(U8)buffer[0],(U8)buffer[1],(U8)buffer[2],(U8)buffer[3],(U8)buffer[4]);
-
-            if ((GET_MESSAGE(buffer[0]) == SUBACK) && ((sz - 2) == buffer[1]) && (buffer[2] == MSB(MESSAGE_ID)) &&
-                (buffer[3] == LSB(MESSAGE_ID)))
-            {
-                //printf("Subscribed to MQTT Service %s with QoS %d\n", subscription, buffer[4]);
-
-                topicLen = strlen(subscription);
-
-                result = true;
-            }
+            result = inBuff.open2(wrapper, inBuffData, sizeof(inBuffData), EOLMODE_any);
         }
     }
 
     RETURN(result);
 }
-BOOL Mqtt::subscribe(PCSTR          topic,
-                     QoS            qos,
-                     UINT           TO)
+BOOL Mqtt::_subscribe(PMQTTSUBSRIBTION sub,
+                      UINT             TO)
+{
+    BOOL        result          = false;
+    UINT        topicLen;
+
+    ENTER(true);
+
+    U8 var_header[] = { MSB(MESSAGE_ID), LSB(MESSAGE_ID) };    // appended to end of PUBLISH message
+
+    topicLen = strlen(sub->topic);
+
+    // utf topic
+    U8 utf_topic[2 + topicLen + 1 ]; // 2 for message size
+
+    // set up topic payload
+    utf_topic[0] = 0;                       // MSB(topicLen);
+    utf_topic[1] = LSB(topicLen);
+    memcpy((char *) &utf_topic[2], sub->topic, topicLen);
+    utf_topic[2 + topicLen] = sub->qos;
+
+    U8 fixed_header[] = { SET_MESSAGE(SUBSCRIBE) | 0x2, U8(sizeof(var_header) + sizeof(utf_topic)) };
+    
+    //    fixed_header_t  fixed_header = { .QoS = 0, .connect_msg_t = SUBSCRIBE, .remaining_length = sizeof(var_header)+strlen(utf_topic) };
+
+    U8 packet[sizeof(fixed_header) + sizeof(var_header) + sizeof(utf_topic)];
+
+    memset(packet, 0, sizeof(packet));
+    memcpy(packet, &fixed_header, sizeof(fixed_header));
+    memcpy(packet + sizeof(fixed_header), var_header, sizeof(var_header));
+    memcpy(packet + sizeof(fixed_header) + sizeof(var_header), utf_topic, sizeof(utf_topic));
+
+    //strz_dump("SUB REQ ", packet, sizeof(packet));
+
+    if (axdev_write(sock, packet, sizeof(packet), TO) == (INT)sizeof(packet))
+    {
+        //printf("sent SUBSCRIBE for %s\n", sub->topic);
+        result = true;
+    }
+
+    RETURN(result);
+}
+BOOL Mqtt::subscribe(PMQTTSUBSRIBTION subssArray,
+                     UINT           arraySize)
 {
     BOOL        result          = false;
 
     ENTER(true);
-
-    strz_cpy(subscription, topic, sizeof(subscription));
-    subscriptionQoS = qos;
-
-    result = _subscribe(TO);
+    
+    subscribeIndex      = 0;
+    subscribeSent       = false;
+    subscriptions       = subssArray;
+    subscriptionsSize   = arraySize;
+    result              = true; //_subscribe(TO);
 
     RETURN(result);
 }
-
-INT Mqtt::receive(PMQTTMESSAGE   msg,
-                  UINT           TO)
+static UINT readSize(PU8             on, 
+                    unsigned long &  size)
 {
-    INT         result          = -1;
-    long    sz;
-    U8 buffer[128];
-    U32 topicSize;
-    unsigned long i;
-//    U8 puback[4];
+    UINT        result = 0;
 
-    ENTER(true);
-
-    if (sock && topicLen)
+    do
     {
-        //printf("message size is %ld\n",sz);
-        // if more than ack - i.e. data > 0
-        if ((sz = axdev_read(sock, buffer, sizeof(buffer), 0)) > 0)
+        result <<= 7;
+        result  |= (*on & 0x7F);
+
+        size++;
+
+    } while (*(on++) & 0x80);
+
+    return result;
+}
+
+INT Mqtt::_parse_PUBLISH(PMQTTMESSAGE   msg,
+                         long &         sz)
+{
+    INT             result      = 0;
+    U32             topicSize;
+    unsigned long   i           = 1;
+    PU8             buff        = (PU8)inBuff.getData();
+
+    result      = readSize(buff + i, i);
+    topicSize   = (buff[2] << 8) + buff[3];
+
+    int topicLen = MAC_MIN(topicSize, (sizeof(msg->topic) - 1));
+    memcpy(msg->topic, &buff[4], topicLen);
+    *(msg->topic + topicLen) = 0;
+
+    i       += (2 + topicSize);
+    result  -= (2 + topicSize);
+
+    if (((buff[0] >> 1) & 0x03) > QoS0)
+    {
+        msg->messageId = (buff[4 + topicSize] << 8) + buff[4 + topicSize + 1];
+        //printf("Message ID is %d\n", messageId);
+        i += 2; // 2 extra for msgID
+        // if QoS1 the send PUBACK with message ID
+        U8 puback[4] = { SET_MESSAGE(PUBACK), 2, buff[4 + topicSize], buff[4 + topicSize + 1] };
+
+        if (axdev_write(sock, puback, sizeof(puback), 0) == (INT) sizeof(puback))
         {
-            //printf("message size is %ld\n",sz);
-            if (GET_MESSAGE(buffer[0]) == PUBLISH)
-            {
-                //printf("Got PUBLISH message with size %d\n", (U8)buffer[1]);
-                topicSize = (buffer[2] << 8) + buffer[3];
-
-                if (topicSize < sizeof(msg->topic))
-                {
-                    //printf("topic size is %d\n", topicSize);
-                    memcpy(msg->topic, &buffer[4], topicSize);
-                    *(msg->topic + topicSize) = 0;
-
-                    i = 4 + topicSize;
-                    if (((buffer[0] >> 1) & 0x03) > QoS0)
-                    {
-                        msg->messageId = (buffer[4 + topicSize] << 8) + buffer[4 + topicSize + 1];
-                        //printf("Message ID is %d\n", messageId);
-                        i += 2; // 2 extra for msgID
-                        // if QoS1 the send PUBACK with message ID
-                        U8 puback[4] = { SET_MESSAGE(PUBACK), 2, buffer[4 + topicSize], buffer[4 + topicSize + 1] };
-
-                        if (axdev_write(sock, puback, sizeof(puback), 0) == (INT) sizeof(puback))
-                        {
-                        }
-                    }
-                    else
-                        msg->messageId = 0;
-
-                    result = (int) (sz - i);
-                    memcpy(msg->message, &buffer[i], result);
-
-                    *(msg->message + result) = 0;
-
-                    //            for ( ; i < sz; ++i) {
-                    //                print(buffer[i]);
-                    //            }
-                }
-                else
-                    result = 0;
-            }
-            else
-                result = 0;
+            // das gut
         }
-        else
-        {
-            if (sz == -1)
-            {
-                perror("Mqtt::receive ");
-            }
+    }
+    else
+        msg->messageId = 0;
 
-            result = (int) sz;
-        }
+    memcpy(msg->message, &buff[i], result);
 
+    *(msg->message + result) = 0;
+
+    sz = i + result;
+
+    return result;
+}
+INT Mqtt::_parse_PINGRESP(PMQTTMESSAGE   msg,
+                          long &         sz)
+{
+    sz = 2;
+
+    return 0;
+}
+INT Mqtt::_parse_PINGREQ(PMQTTMESSAGE   msg,
+                         long &         sz)
+{
+    U8 fixed_header[] = { SET_MESSAGE(PINGRESP), 0 };
+
+    if (axdev_write(sock, fixed_header, sizeof(fixed_header), 100) == (INT)sizeof(fixed_header))
+    {
     }
 
-//    printf("mqtt_get_message result = %d\n", result);
+    sz = 2;
+     
+    return 0;
+}
+INT Mqtt::_parse_SUBACK(PMQTTMESSAGE   msg,
+                        long &         sz)
+{
+// if ((GET_MESSAGE(buffer[0]) == SUBACK) && ((sz - 2) == buffer[1]) && (buffer[2] == MSB(MESSAGE_ID)) &&
+//     (buffer[3] == LSB(MESSAGE_ID)))
+// {
+//     printf("Subscribed to MQTT Service %s with QoS %d\n", sub->topic, sub->qos);
 
+//     result = true;
+// }
 
-    RETURN(result);
+    PU8     buff = (PU8)inBuff.getData();
+
+    if (((sz - 2) >= buff[1]) && (buff[2] == MSB(MESSAGE_ID)) && (buff[3] == LSB(MESSAGE_ID)))
+    {
+        if (subscribeIndex != -1)
+        {
+            //printf("Subscribed to MQTT Service %s\n", subscriptions[subscribeIndex].topic);
+
+            subscribeIndex++;
+            subscribeSent = false;
+
+            if ((UINT)subscribeIndex >= subscriptionsSize)
+            {
+                //printf("@@@@@@@@@ Subscription over\n");
+                subscribeIndex = -1;
+            }
+        }
+    }
+
+    sz = 5;
+
+    return 0;
+}
+INT Mqtt::_parse_PUBACK(PMQTTMESSAGE   msg,
+                        long &         sz)
+{
+        // if (qos == QoS1)
+        // {
+        //     // expect PUBACK with MessageID
+        //     U8   buffer[4];
+
+        //     // FIXME move this block to 
+        //     long sz = axdev_read(sock, buffer, sizeof(buffer), TO);  // wait for SUBACK
+
+        //     //    printf("buffer size is %ld\n",sz);
+        //     //    printf("%2x:%2x:%2x:%2x:%2x\n",(U8)buffer[0],(U8)buffer[1],(U8)buffer[2],(U8)buffer[3],(U8)buffer[4]);
+
+        //     if ((GET_MESSAGE(buffer[0]) == PUBACK) && ((sz - 2) == buffer[1]) && (buffer[2] == MSB(pubMsgID)) &&
+        //         (buffer[3] == LSB(pubMsgID)))
+        //     {
+        //         //printf("Published to MQTT Service %s with QoS1\n", topic);
+
+        //         result = 1;
+        //     }
+        //     else
+        //         result = 0;
+        // }
+        // else
+        //     result = 1;
+
+    sz = 4;
+
+    return 0;
 }
 
-INT Mqtt::publish(PCSTR          topic,
-                  PCSTR          msg,
-                  QoS            qos,
-                  UINT           TO)
+
+INT Mqtt::turn(PMQTTMESSAGE   msg,
+               UINT           TO)
 {
-    INT         result          = -1;
+#define MAC_MSG(a)  case (a): result = _parse_##a(msg, sz); break
+
+    INT         result          = 0;
+    long        sz;
 
     ENTER(true);
 
     if (sock)
     {
-        if (qos == QoS0)
+        if ((subscribeIndex != -1) && !subscribeSent)
         {
-            // utf topic
-            U8 utf_topic[2 + strlen(topic)]; // 2 for message size QoS-0 does not have msg ID
+            subscribeSent = _subscribe(&subscriptions[subscribeIndex], 100);
+        }
 
-            // set up topic payload
-            utf_topic[0] = 0;                       // MSB(strlen(topic));
-            utf_topic[1] = LSB(strlen(topic));
-            memcpy((char *) &utf_topic[2], topic, strlen(topic));
+        while ((sz = inBuff.read(TO)) > 0)
+        {
+            PU8 buff    = (PU8)inBuff.getData();
+            //int was     = sz;
 
-            U8 fixed_header[] = { SET_MESSAGE(PUBLISH) | (qos << 1), sizeof(utf_topic) + strlen(msg) };
-            //    fixed_header_t  fixed_header = { .QoS = 0, .connect_msg_t = PUBLISH, .remaining_length = sizeof(utf_topic)+strlen(msg) };
+            //strz_dump("RECV: ", buff, sz);
+            lastKA = axtime_get_monotonic();
 
-            U8 packet[sizeof(fixed_header) + sizeof(utf_topic) + strlen(msg)];
+            switch (GET_MESSAGE(buff[0]))
+            {
+                MAC_MSG(PUBLISH);
+                MAC_MSG(PINGRESP);
+                MAC_MSG(PINGREQ);
+                MAC_MSG(SUBACK);
+                MAC_MSG(PUBACK);
 
-            memset(packet, 0, sizeof(packet));
-            memcpy(packet, &fixed_header, sizeof(fixed_header));
-            memcpy(packet + sizeof(fixed_header), utf_topic, sizeof(utf_topic));
-            memcpy(packet + sizeof(fixed_header) + sizeof(utf_topic), msg, strlen(msg));
+                default:
+                    result  = 0;
+                    break;
+            }
 
-            result = axdev_write(sock, packet, sizeof(packet), TO) == sizeof(packet);
+            //printf("sz  = %d, was = %d\n", (int)sz, (int)was);
+            inBuff.purge(sz);
+        }
+
+        if (sz == -1)
+        {
+            perror("Mqtt::receive ");
+            result = -1;
+        }
+    }
+
+    RETURN(result);
+
+#undef  MAC_MSG    
+}
+
+INT Mqtt::publish(PCSTR          topic,
+                  PCSTR          msg,
+                  QoS            qos,
+                  UINT           flags,
+                  UINT           TO)
+{
+#define VAR_SIZE_SZ(l)    ((l > 127) ? 2 : 1)
+#define VAR_SIZE_0(l)     ((l > 127) ? (l | 0x80) : len)
+#define VAR_SIZE_1(l)     ((l > 127) ? (l >> 7) : 0)
+
+    INT         result          = -1;
+
+    ENTER(true);
+
+    int msgLen = strlen(msg);
+    int topicLen = strlen(topic);
+
+    //printf("< '%s' '%s'\n", topic, msg);
+
+    if (qos == QoS0)
+    {
+        // utf topic
+        U8 utf_topic[2 + topicLen]; // 2 for message size QoS-0 does not have msg ID
+
+        // set up topic payload
+        utf_topic[0] = 0;                       // MSB(topicLen);
+        utf_topic[1] = LSB(topicLen);
+        memcpy((char *) &utf_topic[2], topic, topicLen);
+
+        unsigned len        =  sizeof(utf_topic) + msgLen;
+        unsigned headerLen  = sizeof(U8);
+                    headerLen += VAR_SIZE_SZ(len);
+
+        U8 fixed_header[] = { U8(SET_MESSAGE(PUBLISH) | 
+                                            (qos << 1) | 
+                            (flags & MQTT_FLAG_RETAIN ? 1 : 0)), VAR_SIZE_0(len), VAR_SIZE_1(len) };
+        //    fixed_header_t  fixed_header = { .QoS = 0, .connect_msg_t = PUBLISH, .remaining_length = sizeof(utf_topic)+msgLen };
+
+        int packetLen = headerLen + sizeof(utf_topic) + msgLen;
+
+        if (MQTT_BUFF_SIZE >= packetLen)
+        {
+            memset(outBuff, 0, packetLen);
+            memcpy(outBuff, &fixed_header, headerLen);
+            memcpy(outBuff + headerLen, utf_topic, sizeof(utf_topic));
+            memcpy(outBuff + headerLen + sizeof(utf_topic), msg, msgLen);
+
+            result = axdev_write(sock, outBuff, packetLen, TO) == packetLen;
         }
         else
         {
-            pubMsgID++;
-            // utf topic
-            U8 utf_topic[2 + strlen(topic) + 2]; // 2 extra for message size > QoS0 for msg ID
+            printf("MQTT packet too long  %d vs %d max\n", packetLen, MQTT_BUFF_SIZE);
+        }
+    }
+    else
+    {
+        pubMsgID++;
+        // utf topic
+        U8 utf_topic[2 + topicLen + 2]; // 2 extra for message size > QoS0 for msg ID
 
-            // set up topic payload
-            utf_topic[0] = 0;                       // MSB(strlen(topic));
-            utf_topic[1] = LSB(strlen(topic));
-            memcpy((char *) &utf_topic[2], topic, strlen(topic));
-            utf_topic[sizeof(utf_topic) - 2] = MSB(pubMsgID);
-            utf_topic[sizeof(utf_topic) - 1] = LSB(pubMsgID);
+        // set up topic payload
+        utf_topic[0] = 0;                       // MSB(topicLen);
+        utf_topic[1] = LSB(topicLen);
+        memcpy((char *) &utf_topic[2], topic, topicLen);
+        utf_topic[sizeof(utf_topic) - 2] = MSB(pubMsgID);
+        utf_topic[sizeof(utf_topic) - 1] = LSB(pubMsgID);
 
-            U8 fixed_header[] = { SET_MESSAGE(PUBLISH) | (qos << 1), sizeof(utf_topic) + strlen(msg) };
+        unsigned len        =  sizeof(utf_topic) + msgLen;
+        unsigned headerLen  = (sizeof(U8) + VAR_SIZE_SZ(len));
+        U8 fixed_header[] = { U8(SET_MESSAGE(PUBLISH) | (qos << 1)), VAR_SIZE_0(len), VAR_SIZE_1(len) };
 
-            U8 packet[sizeof(fixed_header) + sizeof(utf_topic) + strlen(msg)];
+        int packetLen = headerLen + sizeof(utf_topic) + msgLen;
 
-            memset(packet, 0, sizeof(packet));
-            memcpy(packet, &fixed_header, sizeof(fixed_header));
-            memcpy(packet + sizeof(fixed_header), utf_topic, sizeof(utf_topic));
-            memcpy(packet + sizeof(fixed_header) + sizeof(utf_topic), msg, strlen(msg));
+        if (MQTT_BUFF_SIZE >= packetLen)
+        {
+            memset(outBuff, 0, packetLen);
+            memcpy(outBuff, &fixed_header, headerLen);
+            memcpy(outBuff + headerLen, utf_topic, sizeof(utf_topic));
+            memcpy(outBuff + headerLen + sizeof(utf_topic), msg, msgLen);
 
-            if (axdev_write(sock, packet, sizeof(packet), TO) == (INT) sizeof(packet))
+            if (axdev_write(sock, outBuff, packetLen, TO) == (INT) packetLen)
             {
-                if (qos == QoS1)
-                {
-                    // expect PUBACK with MessageID
-                    U8   buffer[4];
-                    long sz = axdev_read(sock, buffer, sizeof(buffer), TO);  // wait for SUBACK
-
-                    //    printf("buffer size is %ld\n",sz);
-                    //    printf("%2x:%2x:%2x:%2x:%2x\n",(U8)buffer[0],(U8)buffer[1],(U8)buffer[2],(U8)buffer[3],(U8)buffer[4]);
-
-                    if ((GET_MESSAGE(buffer[0]) == PUBACK) && ((sz - 2) == buffer[1]) && (buffer[2] == MSB(pubMsgID)) &&
-                        (buffer[3] == LSB(pubMsgID)))
-                    {
-                        printf("Published to MQTT Service %s with QoS1\n", topic);
-
-                        result = 1;
-                    }
-                    else
-                        result = 0;
-                }
-                else
-                    result = 1;
-
+                // Das ist gut
             }
         }
+        else
+            printf("MQTT packet too long  %d vs %d max\n", packetLen, MQTT_BUFF_SIZE);
     }
 
     RETURN(result);
@@ -397,10 +529,9 @@ void Mqtt::disconnect()
 
     if (sock)
     {
-        if (topicLen)
+        if (subscriptions)
         {
             axdev_write(sock, fixed_header, sizeof(fixed_header), 1000);
-            topicLen = 0;
         }
 
         sock = axssocket_close(sock);
@@ -416,12 +547,12 @@ BOOL Mqtt::reconnect(UINT TO)
 
     if (_connect(TO))
     {
-        if (*subscription)
+        if (subscriptions)
         {
-            result = _subscribe(TO);
+            subscribeIndex = 0;
         }
-        else
-            result = true;
+
+        result = true;
     }
 
     RETURN(result);
@@ -430,6 +561,7 @@ BOOL Mqtt::keepAlive(UINT           TO)
 {
     BOOL        result          = false;
     AXTIME      now;
+    int         rd;
 
     ENTER(true);
 
@@ -439,32 +571,28 @@ BOOL Mqtt::keepAlive(UINT           TO)
 
         if ((now - lastKA) >= (kaTimeout * 1000))
         {
-            U8 fixed_header[] = { SET_MESSAGE(PINGREQ), 0 };
-
-            if (axdev_write(sock, fixed_header, sizeof(fixed_header), TO) == (INT)sizeof(fixed_header))
+            if ((now - lastKA) <= ((kaTimeout * 2) * 1000))
             {
-                //printf("Mqtt.cpp(451): stage sent PINGREQ\n");
-                U8   buffer[5];
-                long sz = axdev_read(sock, buffer, sizeof(buffer), TO);  // wait for SUBACK
+                U8 fixed_header[] = { SET_MESSAGE(PINGREQ), 0 };
 
-                //    printf("buffer size is %ld\n",sz);
-                //    printf("%2x:%2x:%2x:%2x:%2x\n",(U8)buffer[0],(U8)buffer[1],(U8)buffer[2],(U8)buffer[3],(U8)buffer[4]);
-
-                if (sz > 0)
-                {
-                    if ((GET_MESSAGE(buffer[0]) == PINGRESP))
-                    {
-                        //printf("Mqtt.cpp(451): stage GOT PINGRESP\n");
-
-                        lastKA = now;
-                        result = true;
-                    }
-                }
+                axdev_write(sock, fixed_header, sizeof(fixed_header), TO);
+                
+                result = true;
             }
-        }
+            // else
+            //     printf("ERR TO %d %d\n", (int)now, (int)lastKA);
 
-        result = true;
+        }
+        else
+            result = true;
     }
+    // else
+    //     printf("ERR sock is null\n");
+
+    // if (!result)
+    // {
+    //     printf("@@@@@@@@@@@@@@@@@2 KA !!!!!!!!!!!!\n");
+    // }
 
     RETURN(result);
 }
