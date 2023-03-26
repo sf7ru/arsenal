@@ -13,7 +13,9 @@
 
 BEAN_NAME	:=  net/mqtt@arsenal/beans
 
-BEAN_DEPEND	:= net@arsenal/libax
+BEAN_DEPEND	:= 
+
+# net@arsenal/libax
 
 BEAN_FILES	:=		\
 Mqtt.cpp	\

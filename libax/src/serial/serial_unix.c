@@ -302,6 +302,10 @@ static INT _serial_ctl(PSERIALDEV   pst_dev,
             }
             break;
 
+        case AXDEVCTL_GETFD:
+            i_result = pst_dev->i_fd;
+            break;
+
         default:
             break;
     }
@@ -357,7 +361,7 @@ PAXDEV serial_open(PSERIALPROPS p,
         TYPE(pts,   "pts/");
 
         default:
-#if (TARGET_ARCH == __AX_arm__)
+#if ((TARGET_ARCH == __AX_arm__) && !defined(UART_NAMES_ARE_TRADITIONAL))
             psz_type = "ttyO";
 #else
             psz_type = "ttyS";

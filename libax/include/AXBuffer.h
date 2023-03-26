@@ -98,7 +98,7 @@ public:
                         { return buffSize; };
 
         INT             purge                   (UINT           size)
-                        { if (size) seen = size; shake(); return used; }
+                        { if (size) seen = MAC_MIN(size, used); shake(); return used; }
 
         void            purgeAll                ()
                         { seen = 0; used = 0; }
@@ -130,6 +130,9 @@ public:
 
         void            setEchoMode             (INT            mode)
         { echoMode = mode; }
+
+        INT             push                    (PVOID          data, 
+                                                 INT            size);
 };
 
 

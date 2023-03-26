@@ -51,7 +51,7 @@ virtual                 ~I2cDevice              ();
                                                  UINT           ifaceNo  = 0,
                                                  UINT           speed    = 100000);
 
-        INT             transaction             (INT            wr_len,
+virtual INT             transaction             (INT            wr_len,
                                                  PU8            wr_data,
                                                  INT            rd_len,
                                                  PU8            rd_data);

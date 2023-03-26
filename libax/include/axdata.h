@@ -168,7 +168,8 @@ typedef enum
 {
     EOLMODE_cr         = 0,
     EOLMODE_lf,
-    EOLMODE_crlf
+    EOLMODE_crlf,
+    EOLMODE_any,    
 } EOLMODE;
 
 // ---------------------------------------------------------------------------

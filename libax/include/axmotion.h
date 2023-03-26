@@ -37,6 +37,8 @@
 // -|-----------------------|-------------------------------------------------
 
 
+#define MOTPHASE_idle       MOTPHASE_still
+
 typedef enum
 {
     MOTPHASE_unknown            = 0,

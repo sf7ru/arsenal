@@ -78,6 +78,10 @@ void                axsocket_stop               (void);
 
 BOOL                axsocket_start              (void);
 
+BOOL                axsocket_start_static       (PCSTR              addressStr, 
+                                                 PCSTR              netmaskStr, 
+                                                 PCSTR              gatewayStr);
+
 UINT                axsocket_error              (void);
 
 BOOL                axsocket_host_get_ip        (PVOID              addr,

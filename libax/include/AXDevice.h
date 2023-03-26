@@ -67,6 +67,9 @@ public:
                                                  UINT           TO)
                         { return axdev_write(dev, (PVOID)data, size, TO); }
 
+        void            setDev                  (PAXDEV         theDev)
+        { dev = theDev; }
+
         INT             getDescriptor           ()
                         { return dev->pfn_ctl ? axdev_ctl(dev, AXDEVCTL_GETFD, 0, 0) : -1; }
 };

@@ -222,6 +222,9 @@ PCSTR               strz_from_size              (PSTR               buff,
                                                  U64                size,
                                                  PCSTR              postfix);
 
+INT                 strz_from_ip4               (PSTR               buff,
+                                                 UINT               len,
+                                                 U32                ip);
 
 
 PCSTR               strz_timeunit_name_eng      (TIMEUNIT           unitId,

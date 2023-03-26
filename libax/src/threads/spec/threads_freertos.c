@@ -173,6 +173,8 @@ BOOL axthread_priority_set(HAXTHREAD        h_thread,
 // ***************************************************************************
 UINT axthread_get_id()
 {
-    return 0;
+extern void *pxCurrentTCB;
+
+    return (UINT)pxCurrentTCB;
 }
 

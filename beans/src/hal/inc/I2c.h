@@ -63,8 +63,9 @@ protected:
                                                  INT            outSize,
                                                  PVOID          inBuff,
                                                  INT            inSize);
-
 public:
+
+
                         I2c                     ();
                         ~I2c                    ();
 
@@ -76,6 +77,7 @@ public:
 
          void           recover                 ();
 
+         void           bitBangCLK              (int            value);
 
 //         U8             readReg                 (UINT           reg);
 //
