@@ -1,0 +1,21 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= hal/stm32/lwip@arsenal/beans
+
+BEAN_DEPEND	:= lwip@arsenal/beans
+
+BEAN_FILES	:= sys_arch.c  
+
+
+include $(PATH_MAKEFILES)/Castfile

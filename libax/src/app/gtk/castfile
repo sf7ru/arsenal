@@ -1,0 +1,24 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= app/gtk@arsenal/libax
+
+BEAN_DEPEND	:= app@arsenal/libax
+
+BEAN_FILES	:=		\
+AXGtkApp.cpp			\
+
+SOURCE_TOOLKITS         += gtk+-3.0
+
+include $(PATH_MAKEFILES)/Castfile
+

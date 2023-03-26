@@ -1,0 +1,23 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= proto/nstyle@arsenal/libax
+
+BEAN_DEPEND	:= gnss@arsenal/libax mathlib@arsenal/beans
+
+BEAN_FILES	:=	\
+ProtoNStyle.cpp		\
+
+
+include $(PATH_MAKEFILES)/Castfile
+

@@ -1,0 +1,22 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= hal/stm32/BSP/Components/ili9341@arsenal/beans
+
+BEAN_DEPEND	:= 
+
+BEAN_FILES	:=	\
+ili9341.c		\
+
+
+include $(PATH_MAKEFILES)/Castfile

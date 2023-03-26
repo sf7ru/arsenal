@@ -1,0 +1,23 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= threadsx@arsenal/libax
+
+BEAN_DEPEND	:= records@arsenal/libax sys@arsenal/libax threads@arsenal/libax
+
+BEAN_FILES	:=	\
+threadX.c		\
+threadgroup.c
+
+include $(PATH_MAKEFILES)/Castfile
+

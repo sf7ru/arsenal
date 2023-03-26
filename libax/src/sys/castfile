@@ -1,0 +1,28 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= sys@arsenal/libax
+
+BEAN_DEPEND	:=	
+
+BEAN_FILES	:=	
+
+BEAN_WILDCARDS  :=	\
+ConsoleDev              \
+specific		\
+events			\
+
+
+
+include $(PATH_MAKEFILES)/Castfile
+

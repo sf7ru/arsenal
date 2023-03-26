@@ -1,0 +1,32 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= files@arsenal/libax
+
+BEAN_DEPEND	:=	records@arsenal/libax strings@arsenal/libax
+
+BEAN_FILES	:=	\
+files_common.c		\
+files_find.c		\
+fname.c			\
+
+BEAN_FILES_CPP  :=                           
+
+
+BEAN_WILDCARDS  :=	\
+axfile			\
+filefind		\
+
+
+include $(PATH_MAKEFILES)/Castfile
+

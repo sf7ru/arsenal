@@ -1,0 +1,24 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= hal/stm32/usb/STM32_USB_Device_Library/Class/Composite_CDC_CHID@arsenal/beans
+
+BEAN_DEPEND	:= hal/stm32/usb/STM32_USB_Device_Library/Core@arsenal/beans
+
+BEAN_FILES	:=	\
+usbd_cdc_hid.c		\
+usbd_cdc.c  		\
+usbd_customhid.c	\
+
+
+include $(PATH_MAKEFILES)/Castfile

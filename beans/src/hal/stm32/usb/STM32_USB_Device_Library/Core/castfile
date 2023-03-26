@@ -1,0 +1,25 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= hal/stm32/usb/STM32_USB_Device_Library/Core@arsenal/beans
+
+BEAN_DEPEND	:= 
+
+BEAN_FILES	:=	\
+usbd_core.c		\
+usbd_ctlreq.c		\
+usbd_ioreq.c		\
+
+
+
+include $(PATH_MAKEFILES)/Castfile

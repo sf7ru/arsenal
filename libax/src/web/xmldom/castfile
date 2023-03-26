@@ -1,0 +1,26 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= web/xmldom@arsenal/libax
+
+BEAN_DEPEND	:=	web/xml@arsenal/libax
+
+BEAN_FILES	:=		\
+AXXmlNode.cpp		\
+AXXmlDoc.cpp		\
+AXXmlDoc_parse.cpp	\
+AXXmlProperty.cpp	\
+xml.lut
+
+include $(PATH_MAKEFILES)/Castfile
+

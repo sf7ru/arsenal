@@ -1,0 +1,26 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= dbg/mmclog@arsenal/beans
+
+BEAN_DEPEND	:=	\
+dev/extmem/mmcspi@arsenal/beans	\
+
+
+BEAN_FILES	:=			\
+MmcLog.cpp			\
+
+
+
+include $(PATH_MAKEFILES)/Castfile
+

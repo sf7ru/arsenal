@@ -1,0 +1,26 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= hal/linux@arsenal/beans
+
+BEAN_DEPEND	:= hal@arsenal/beans threadsx@arsenal/libax
+
+BEAN_FILES	:=	\
+LinuxHal.cpp			\
+LinuxI2c.cpp			\
+LinuxI2cDevice.cpp		\
+LinuxSpi.cpp			\
+LinuxWdt.cpp			\
+
+
+include $(PATH_MAKEFILES)/Castfile

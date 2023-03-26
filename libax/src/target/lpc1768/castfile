@@ -1,0 +1,42 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= target/lpc1768@arsenal/libax
+
+BEAN_DEPEND	:= 			\
+hal/lcp176x/board@snark/beans           \
+hal/lcp176x/chip@snark/beans            \
+hal/lcp176x/hal@snark/beans             \
+hal/lcp176x/startup@snark/beans         \
+ulupdate@snark/beans            \
+storage/iap@snark/beans         \
+time@arsenal/libax		\
+threads@arsenal/libax		\
+
+
+
+ifeq (,$(USE_NOOS))
+
+BEAN_DEPEND	+=			\
+freertos7/lpc176x@snark/beans		\
+
+endif
+
+
+BEAN_FILES	:=
+
+GCC_LINK_SCRIPT_DIR	:= $(PATH_SOURCES)/arsenal/libax/src/target/$(T)/
+
+
+include $(PATH_MAKEFILES)/Castfile
+

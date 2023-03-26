@@ -1,0 +1,34 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= hal/stm32/f1xx@arsenal/beans
+
+BEAN_DEPEND	:= 				\
+hal@arsenal/beans					\
+hal/stm32@arsenal/beans				\
+hal/stm32/CMSIS@arsenal/beans			\
+hal/stm32/CMSIS/Device/ST/STM32F1xx@arsenal/beans	\
+hal/stm32/STM32F1xx_HAL_Driver@arsenal/beans	\
+data/buff@arsenal/beans							\
+
+
+BEAN_FILES	:=	\
+Stm32f1xxIap.cpp  	\
+Stm32f1xxI2c.cpp  	\
+Stm32f1xxUart.c		\
+Stm32f1xxSpi.cpp		\
+Stm32f1xxSys.cpp		\
+Stm32f1xxPwm.cpp		\
+
+
+include $(PATH_MAKEFILES)/Castfile

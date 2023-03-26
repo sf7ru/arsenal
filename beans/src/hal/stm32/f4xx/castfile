@@ -1,0 +1,54 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= hal/stm32/f4xx@arsenal/beans
+
+BEAN_DEPEND	:= 				\
+hal@arsenal/beans					\
+hal/stm32@arsenal/beans				\
+hal/stm32/CMSIS@arsenal/beans			\
+hal/stm32/CMSIS/Device/ST/STM32F4xx@arsenal/beans	\
+hal/stm32/STM32F4xx_HAL_Driver@arsenal/beans	\
+data/buff@arsenal/beans                                                 \
+
+
+
+
+BEAN_FILES	:=	\
+Stm32f4xxI2c.cpp  	\
+Stm32f4xxUsb.cpp	\
+Stm32f4xxIap.cpp  	\
+Stm32f4xxSpi.cpp	\
+Stm32f4xxSys.cpp	\
+Stm32f4xxPwm.cpp	\
+Stm32f4xxEth.cpp 	\
+
+
+BEAN_WILDCARDS	:=      \
+Stm32f4xxUart		\
+
+
+bw = Stm32f4xxI2cDevice.cpp  \
+
+
+ifneq (,$(USE_NOOS))
+else
+BEAN_FILES += stm32f4xx_hal_timebase_TIM.c 
+endif
+
+#ifneq (,$(USE_BOOTLD))
+#BUILD_OPTS          += -DVECT_TAB_OFFSET=0x8000
+#endif
+
+
+include $(PATH_MAKEFILES)/Castfile

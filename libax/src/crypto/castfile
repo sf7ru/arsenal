@@ -1,0 +1,27 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= crypto@arsenal/libax
+
+BEAN_DEPEND	:=	
+
+BEAN_FILES	:=	\
+scramble.c		\
+tea.c			\
+xxtea.c			\
+dh.c			\
+
+							
+include $(PATH_MAKEFILES)/Castfile
+
+

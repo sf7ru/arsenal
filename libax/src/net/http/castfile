@@ -1,0 +1,36 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= net/http@arsenal/libax
+
+BEAN_DEPEND	:=	data@arsenal/libax net@arsenal/libax strings@arsenal/libax
+
+BEAN_FILES	:=		\
+http.lut			\
+AXHttp.cpp			\
+AXHttpClient.cpp	\
+AXHttpReq.cpp		\
+AXHttpServer.cpp	\
+AXHttpSite.cpp
+
+
+ifeq (unix,$(TARGET_FAMILY))
+ifneq (,$(OPT_USEAXHTTPSSL))
+BUILD_OPTS                      += -DAXHTTP_SSL
+SOURCE_BINLIBRARIES             += ssl crypto
+BEAN_WILDCARDS	:=		AXHttpSslWrapper		
+endif
+endif
+
+include $(PATH_MAKEFILES)/Castfile
+

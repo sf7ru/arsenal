@@ -1,0 +1,30 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= serial@arsenal/libax
+
+BEAN_DEPEND	:= sys@arsenal/libax strings@arsenal/libax
+
+BEAN_FILES	:=	
+
+
+BEAN_WILDCARDS	:=	\
+serial
+
+BEAN_WILDCARDS_CPP	:=	\
+AXSerial
+
+
+include $(PATH_MAKEFILES)/Castfile
+
+

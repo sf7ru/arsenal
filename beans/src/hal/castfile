@@ -1,0 +1,30 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= hal@arsenal/beans
+
+BEAN_DEPEND	:= 				\
+dev/extmem@arsenal/beans	\
+dev/rtc@arsenal/beans		\
+
+BEAN_FILES	:=	\
+CommonHal.cpp		\
+I2cDevice.cpp		\
+SpiDevice.cpp		\
+Spi.cpp			\
+I2c.cpp			\
+strz_from_hal.c		\
+hid_keyboard.c		\
+
+
+include $(PATH_MAKEFILES)/Castfile

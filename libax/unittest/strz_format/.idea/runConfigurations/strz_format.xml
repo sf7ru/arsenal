@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="strz_format" type="CMakeRunConfiguration" factoryName="Application" singleton="true" PASS_PARENT_ENVS_2="true" PROJECT_NAME="strz_format" TARGET_NAME="strz_format" CONFIG_NAME="Debug" RUN_PATH="$PROJECT_DIR$/.build/debug/strz_format">
+    <envs />
+    <method />
+  </configuration>
+</component>

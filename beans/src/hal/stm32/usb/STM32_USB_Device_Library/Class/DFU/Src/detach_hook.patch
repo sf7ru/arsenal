@@ -1,0 +1,13 @@
+--- usbd_dfu.c_origin	2018-05-18 15:29:45.107307535 +0300
++++ usbd_dfu.c	2018-05-18 15:43:46.184043267 +0300
+@@ -716,6 +716,10 @@
+   /* Check the detach capability in the DFU functional descriptor */
+   if ((USBD_DFU_CfgDesc[12 + (9 * USBD_DFU_MAX_ITF_NUM)]) & DFU_DETACH_MASK)
+   {
++extern void USER_DFU_DetachHook();
++
++    USER_DFU_DetachHook();
++
+     /* Perform an Attach-Detach operation on USB bus */
+     USBD_Stop (pdev);
+     USBD_Start (pdev);  

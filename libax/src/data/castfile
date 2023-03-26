@@ -1,0 +1,29 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= data@arsenal/libax
+
+BEAN_DEPEND	:= math@arsenal/libax
+
+BEAN_FILES	:=	\
+AXBuffer.cpp	\
+AXOutBuffer.cpp	\
+binmap2.c	\
+buff.c		\
+ones.c		\
+ringbuff.c  \
+bitstream.c	\
+
+
+include $(PATH_MAKEFILES)/Castfile
+

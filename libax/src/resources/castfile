@@ -1,0 +1,25 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= resources@arsenal/libax
+
+BEAN_DEPEND	:= process@arsenal/libax
+
+BEAN_FILES	:=	\
+croesus.c		\
+croesusmm.c		\
+
+
+
+include $(PATH_MAKEFILES)/Castfile
+

@@ -1,0 +1,28 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= web/json@arsenal/libax
+
+BEAN_DEPEND	:=	\
+web/dom@arsenal/libax	\
+strings@arsenal/libax	\
+records@arsenal/libax	\
+
+
+BEAN_FILES	:=	\
+JsonSheet.cpp		\
+JsonParser.cpp		\
+
+
+include $(PATH_MAKEFILES)/Castfile
+

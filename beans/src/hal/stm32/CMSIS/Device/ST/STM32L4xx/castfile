@@ -1,0 +1,22 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= hal/stm32/CMSIS/Device/ST/STM32L4xx@arsenal/beans
+
+BEAN_DEPEND	:= 
+
+BEAN_FILES	:=		\
+Templates/system_stm32l4xx.c	\
+
+
+include $(PATH_MAKEFILES)/Castfile

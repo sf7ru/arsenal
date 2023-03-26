@@ -1,0 +1,30 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= log@arsenal/libax
+
+BEAN_DEPEND	:= threadsx@arsenal/libax files@arsenal/libax
+
+BEAN_FILES	:=\
+AXSysLog.cpp					\
+AXSysLog_$(TARGET_FAMILY).cpp			\
+log.c                           		\
+logfileway.c            \
+logmobileparkway.c      \
+logtagway.c		\
+
+
+# BEAN_PREBUILD	:= AXSysLog_winres.obj
+
+include $(PATH_MAKEFILES)/Castfile
+

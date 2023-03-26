@@ -1,0 +1,33 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= time@arsenal/libax
+
+BEAN_DEPEND	:=	
+
+BEAN_FILES	:= 				\
+time_common.c					\
+
+BEAN_FILES_CPP	:=				\
+AXCheckTimer.cpp				\
+
+
+BEAN_WILDCARDS  :=	\
+time			\
+monotonictime		\
+itimer			\
+
+
+
+include $(PATH_MAKEFILES)/Castfile
+

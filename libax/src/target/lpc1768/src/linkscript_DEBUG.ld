@@ -1,0 +1,1 @@
+/home/ak/x/snark/beans/src/hal/lcp176x/linkscript_DEBUG.ld

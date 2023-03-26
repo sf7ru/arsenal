@@ -1,0 +1,21 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= hal/stm32/usb/STM32_USB_Device_Library/Class/CustomHID@arsenal/beans
+
+BEAN_DEPEND	:= hal/stm32/usb/STM32_USB_Device_Library/Core@arsenal/beans
+
+BEAN_FILES	:=	\
+usbd_customhid.c	\
+
+include $(PATH_MAKEFILES)/Castfile

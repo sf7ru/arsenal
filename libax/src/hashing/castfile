@@ -1,0 +1,34 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= hashing@arsenal/libax
+
+BEAN_DEPEND	:=	
+
+BEAN_FILES	:=	\
+crc8.c			\
+crc16.c			\
+crc32.c			\
+fletcher16.c		\
+fletcher32.c		\
+adler32.c		\
+md5.c			\
+simplesum.c		\
+xor.c			\
+crc64ecma.c		\
+sha256.c		\
+
+
+include $(PATH_MAKEFILES)/Castfile
+
+

@@ -1,0 +1,41 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= hal/stm32@arsenal/beans
+
+BEAN_DEPEND	:= hal@arsenal/beans utils@arsenal/libax dev/thermal@arsenal/beans
+
+BEAN_FILES	:=	\
+Stm32Hal.cpp  		\
+Stm32Iap.cpp  		\
+Stm32Wdt.cpp		\
+Stm32Spi.cpp		\
+Stm32Pwm.cpp		\
+Stm32I2c.cpp		\
+Stm32Eth.cpp		\
+Stm32Rtc.cpp		\
+Stm32I2cDevice.cpp	\
+syscalls.c		\
+operator_new.cpp	\
+retarget.cpp		\
+Stm32GpioInt.cpp	\
+Stm32Fm.cpp		\
+Stm32Timer.cpp		\
+Stm32Thermal.cpp	\
+
+
+
+#Stm32SpiSw.cpp		\
+
+
+include $(PATH_MAKEFILES)/Castfile

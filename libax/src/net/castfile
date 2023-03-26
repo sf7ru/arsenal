@@ -1,0 +1,39 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= net@arsenal/libax
+
+BEAN_DEPEND	:=
+
+BEAN_FILES	:=	\
+axsocket.c		\
+axsocket_peer.c		\
+axusocket.c		\
+axssocket.c		\
+
+BEAN_WILDCARDS  :=      \
+axsocket                \
+
+
+BEBEBE := \
+a7socket_udp.c		\
+sockets.c			\
+telnet.c			\
+a7ssocket.c			\
+a7socket.c			\
+a7socket_$(TARGET_FAMILY).c	\
+
+
+
+include $(PATH_MAKEFILES)/Castfile
+

@@ -1,0 +1,26 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= threads@arsenal/libax
+
+BEAN_DEPEND	:= sys@arsenal/libax
+
+BEAN_FILES	:=
+
+BEAN_WILDCARDS	:=	\
+spec/mutex		\
+spec/threads		\
+
+
+include $(PATH_MAKEFILES)/Castfile
+

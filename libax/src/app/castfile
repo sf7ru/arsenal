@@ -1,0 +1,28 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= app@arsenal/libax
+
+BEAN_DEPEND	:= time@arsenal/libax files@arsenal/libax  resources@arsenal/libax log@arsenal/libax
+
+BEAN_FILES	:=		\
+AXApp.cpp			\
+AXAppDebug_$(TARGET_SYSTEM).cpp	\
+AXService.cpp			\
+
+BEAN_WILDCARDS  :=      \
+service			\
+
+
+include $(PATH_MAKEFILES)/Castfile
+

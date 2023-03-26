@@ -1,0 +1,31 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= hal/stm32/usb/cdc@arsenal/beans
+
+BEAN_DEPEND	:= \
+hal/stm32/usb@arsenal/beans	\
+hal/stm32/usb/STM32_USB_Device_Library/Class/CustomHID@arsenal/beans \
+data/buff@arsenal/beans	\
+
+
+BEAN_FILES	:=	\
+Stm32UsbHid.cpp		\
+usbd_cdc_if.c		\
+usbd_conf_$(TARGET_CHIP).c			\
+usbd_desc.c			\
+usb_device.c		\
+
+
+
+include $(PATH_MAKEFILES)/Castfile

@@ -1,0 +1,35 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arseanl Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= records@arsenal/libax
+
+BEAN_DEPEND	:=	\
+hashing@arsenal/libax 	\
+utils@arsenal/libax 	\
+strings@arsenal/libax	\
+
+
+BEAN_FILES	:=	\
+idmap.c			\
+ptrqueue.c		\
+recarray.c		\
+recmap2.c		\
+recmap.c		\
+recqueue.c		\
+recset.c		\
+recstack.c		\
+structqueue.c	\
+
+
+include $(PATH_MAKEFILES)/Castfile
+

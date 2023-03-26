@@ -1,0 +1,34 @@
+! Y table_lut digtable_lut LUTID LUTID_
+; First line should cola6in information about the table 
+
+; Common Parameters
+no-cache
+Keep-Alive
+
+; Request Types
+ method_begin
+GET
+POST
+ method_end
+
+; Request Parameters
+Accept
+Accept-Encoding
+Accept-Language
+Accept-Charset
+Connection
+Host
+Pragma
+Referer
+User-Agent
+Via
+If-Modified-Since
+Content-Type
+Content-Length
+Phone
+
+; HTTP Protocol Versions
+ version_begin
+HTTP/1.0
+HTTP/1.1
+ version_end

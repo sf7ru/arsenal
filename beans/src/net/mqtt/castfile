@@ -1,0 +1,26 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:=  net/mqtt@arsenal/beans
+
+BEAN_DEPEND	:= net@arsenal/libax
+
+BEAN_FILES	:=		\
+Mqtt.cpp	\
+
+
+BUILD_OPTS			+= 
+
+
+include $(PATH_MAKEFILES)/Castfile
+

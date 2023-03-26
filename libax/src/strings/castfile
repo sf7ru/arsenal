@@ -1,0 +1,37 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= strings@arsenal/libax
+
+BEAN_DEPEND	:=  hashing@arsenal/libax records@arsenal/libax
+
+BEAN_FILES	:=	\
+strz_substring.c		\
+strz.c  		\
+strz_format.c  	\
+strz_to.c		\
+strz_from.c	\
+strz_template.c	\
+strz_is.c	\
+strz_wildcard.c		\
+axslut.c		\
+base64.c		\
+base64_2.c		\
+axstr.c			\
+strz_dump.c			\
+utf8.c			\
+strz_vars.c		\
+
+
+include $(PATH_MAKEFILES)/Castfile
+

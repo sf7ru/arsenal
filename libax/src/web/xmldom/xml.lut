@@ -1,0 +1,6 @@
+! Y table_lut digtable_lut XMLID XMLID_
+; First line should contain information about the table
+
+; .INI file keywords
+ NULL
+?xml

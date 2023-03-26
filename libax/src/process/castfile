@@ -1,0 +1,29 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= process@arsenal/libax
+
+BEAN_DEPEND	:=	
+
+BEAN_FILES	:=	
+
+
+BEAN_WILDCARDS	:=	\
+process			\
+pipe			\
+module			\
+
+
+include $(PATH_MAKEFILES)/Castfile
+
+
