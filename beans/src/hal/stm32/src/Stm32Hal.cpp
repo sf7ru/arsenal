@@ -41,7 +41,13 @@
 // ------------------------------- DEFINITIONS -------------------------------
 // -----|-------------------|-------------------------------------------------
 
-#if (defined(STM32F4) || defined(STM32L4) || defined(STM32F7))
+#if (defined(STM32F4) || defined(STM32L4))
+#define HAL_HAVE_GPIOD
+#define HAL_HAVE_GPIOE
+#define HAL_HAVE_GPIO_InitTypeDef_Alternate
+#endif
+
+#if (defined(STM32F7))
 #define HAL_HAVE_GPIOD
 #define HAL_HAVE_GPIOE
 #define HAL_HAVE_GPIOF
@@ -49,6 +55,8 @@
 #define HAL_HAVE_GPIOH
 #define HAL_HAVE_GPIO_InitTypeDef_Alternate
 #endif
+
+
 
 #define VALUE_ONE(a)    (HAL_GPIO_WritePin(CBRD_##a##_GPIO, CBRD_##a##_SEL_BIT,\
                             CBRD_##a##_ONE ? GPIO_PIN_SET : GPIO_PIN_RESET))

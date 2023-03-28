@@ -1,0 +1,25 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= dev/spatial/mpu/i2c@arsenal/beans
+
+BEAN_DEPEND	:= dev/spatial/mpu@arsenal/beans
+
+BEAN_FILES	:=	\
+I2cMpu.cpp		\
+
+BEAN_FILES_CPP	:=
+
+
+
+include $(PATH_MAKEFILES)/Castfile

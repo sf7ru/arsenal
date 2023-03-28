@@ -103,6 +103,7 @@ HAXHANDLE Hal::Timer::set(UINT           periodUs,
         switch (next)
         {
             case 1:
+#ifdef __HAL_RCC_TIM6_CLK_ENABLE
                 result  = &timers[next - 1];
                 def     = &result->def;
 
@@ -140,9 +141,11 @@ HAXHANDLE Hal::Timer::set(UINT           periodUs,
 #endif
                 HAL_TIM_Base_Start_IT(def);
 
+#endif // #ifdef __HAL_RCC_TIM6_CLK_ENABLE
                 break;
 
             case 2:
+#ifdef __HAL_RCC_TIM7_CLK_ENABLE            
                 result  = &timers[next - 1];
                 def     = &result->def;
 
@@ -159,6 +162,7 @@ HAXHANDLE Hal::Timer::set(UINT           periodUs,
 
                 HAL_NVIC_SetPriority(TIM7_IRQn, 5, 0);
                 HAL_NVIC_EnableIRQ(TIM7_IRQn);
+#endif //  __HAL_RCC_TIM7_CLK_ENABLE                            
                 break;
 
             default:
