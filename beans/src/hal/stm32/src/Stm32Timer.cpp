@@ -25,7 +25,7 @@
 // ------------------------------- DEFINITIONS -------------------------------
 // -----|-------------------|-------------------------------------------------
 
-#define TOTAL_TIMERS        2
+#define TOTAL_TIMERS        3
 
 #define SBIT_MR0I    0
 #define SBIT_MR0R    1
@@ -71,18 +71,24 @@ static  TIMERCTRL           timers  [ TOTAL_TIMERS ] = { 0 };
         }
 */
 
+extern "C" void TIM5_IRQHandler()
+{
+    PROCESS_TIMER(0);
+}
+
+
 #if defined(PLATFORM_STM32F4XX) || defined(PLATFORM_STM32F7XX)
 extern "C" void TIM6_DAC_IRQHandler(void)
 #else
 extern "C" void TIM6_IRQHandler(void)
 #endif
 {
-    PROCESS_TIMER(0);
+    PROCESS_TIMER(1);
 }
 
 extern "C" void TIM7_IRQHandler()
 {
-    PROCESS_TIMER(1);
+    PROCESS_TIMER(2);
 }
 
 HAXHANDLE Hal::Timer::set(UINT           periodUs,
@@ -103,6 +109,42 @@ HAXHANDLE Hal::Timer::set(UINT           periodUs,
         switch (next)
         {
             case 1:
+                result  = &timers[next - 1];
+                def     = &result->def;
+
+                //Hal::getInstance().gpio.setMode(PP_PIN(PP_OUT, PA4), HAL_SETMODE_FLAG_HIGH);
+
+                __HAL_RCC_TIM5_CLK_ENABLE();
+
+                def->Instance = TIM5;
+                //def->Init.Prescaler = (PCLK2_freq / 1000000) - 1;
+                def->Init.Prescaler = (PCLK2_freq / 1000000);
+                def->Init.CounterMode = TIM_COUNTERMODE_UP;
+                def->Init.Period = periodUs - 1; // periodUs *
+                def->Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+#ifdef TIM_AUTORELOAD_PRELOAD_DISABLE
+                def->Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+#endif
+                def->Init.RepetitionCounter = 0;
+
+                HAL_TIM_Base_Init(def);
+                __HAL_TIM_SetCounter(def, 0);
+
+                sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+                HAL_TIM_ConfigClockSource(def, &sClockSourceConfig);
+
+                sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+                sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+                HAL_TIMEx_MasterConfigSynchronization(def, &sMasterConfig);
+
+                HAL_NVIC_SetPriority(TIM5_IRQn, 5, 0);
+                HAL_NVIC_EnableIRQ(TIM5_IRQn);
+                HAL_TIM_Base_Start_IT(def);
+                break;
+
+                break;
+
+            case 2:
 #ifdef __HAL_RCC_TIM6_CLK_ENABLE
                 result  = &timers[next - 1];
                 def     = &result->def;
@@ -144,7 +186,7 @@ HAXHANDLE Hal::Timer::set(UINT           periodUs,
 #endif // #ifdef __HAL_RCC_TIM6_CLK_ENABLE
                 break;
 
-            case 2:
+            case 3:
 #ifdef __HAL_RCC_TIM7_CLK_ENABLE            
                 result  = &timers[next - 1];
                 def     = &result->def;
