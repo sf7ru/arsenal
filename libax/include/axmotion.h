@@ -46,6 +46,7 @@ typedef enum
     MOTPHASE_accel              = 2, // Acceleration
     MOTPHASE_decel              = 3, // Deceleration
     MOTPHASE_uniform            = 4, // Uniform motion
+    MOTPHASE_user               = 5, // user defined phase
     MOTPHASE_COUNT
 } MOTPHASE;
 
