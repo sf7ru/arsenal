@@ -29,10 +29,7 @@ protected:
                                                          U8             color)
         {
             int offset = x >> 3;
-            //int bit    = (x & 7);
             int bit    = (7 - (x & 7));
-
-            //printf("offset = %d, bit = %d\n", offset, bit);
 
             if (color)
                 *(buff + offset) |= U8(1 << bit);
@@ -41,6 +38,16 @@ protected:
 
             return buff;
         }
+
+        inline U8               getPixel                (int            x,
+                                                         PU8            buff)
+        {
+            int offset = x >> 3;
+            int bit    = (7 - (x & 7));
+
+            return *(buff + offset) & U8(1 << bit) ? 1 : 0;
+        }
+
 public:
                         Display1bit             ()
                         {
@@ -62,6 +69,12 @@ public:
         {
             if ((x < mWidth) && (y < mHeight))
             { setPixel(x, mBuffer + (mPitch * y), color); }
+        }
+
+        UINT            getPixel                (UINT           x,
+                                                 UINT           y)
+        {
+            return ((x < mWidth) && (y < mHeight)) ? getPixel(x, mBuffer + (mPitch * y)) : 0;
         }
 
         void            print                   (PFONTFV1       font,
