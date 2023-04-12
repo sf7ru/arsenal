@@ -97,7 +97,9 @@ typedef const void *            PCVOID;
 typedef PVOID                   HAXHANDLE;
 typedef BOOL                    (*PAXDATAUSER)(PVOID,PVOID,UINT);
 
+#ifndef _MSC_VER
 #define AXTEXT(...)               #__VA_ARGS__
+#endif
 
 
 // -------------------------- Log details level ------------------------------

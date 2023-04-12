@@ -17,7 +17,7 @@
 
 #include <arsenal.h>
 
-#include <a7threads.h>
+#include <axthreads.h>
 
 
 // ---------------------------------------------------------------------------
@@ -27,15 +27,15 @@
 
 // ***************************************************************************
 // FUNCTION
-//      a7mutex_destroy
+//      axmutex_destroy
 // PURPOSE
 //      Destroy Dtalock control structure
 // PARAMETERS
-//      HA7MUTEX pst_lock -- Pointer to Mutex control structure
+//      HAXMUTEX pst_lock -- Pointer to Mutex control structure
 // RESULT
-//      HA7MUTEX -- Always NULL
+//      HAXMUTEX -- Always NULL
 // ***************************************************************************
-HA7MUTEX a7mutex_destroy(HA7MUTEX h_lock)
+HAXMUTEX axmutex_destroy(HAXMUTEX h_lock)
 {
     CRITICAL_SECTION *  pst_lock    = (CRITICAL_SECTION*)h_lock;
 
@@ -48,16 +48,16 @@ HA7MUTEX a7mutex_destroy(HA7MUTEX h_lock)
 }
 // ***************************************************************************
 // FUNCTION
-//      a7mutex_create
+//      axmutex_create
 // PURPOSE
 //      Create Mutex control structure
 // PARAMETERS
 //      none
 // RESULT
-//      HA7MUTEX -- Pointer to the just created Mutex control structure
+//      HAXMUTEX -- Pointer to the just created Mutex control structure
 //                      if all is ok, otherwise NULL
 // ***************************************************************************
-HA7MUTEX a7mutex_create(void)
+HAXMUTEX axmutex_create(void)
 {
     CRITICAL_SECTION *      pst_lock    = NULL;
 
@@ -68,15 +68,15 @@ HA7MUTEX a7mutex_create(void)
         InitializeCriticalSection(pst_lock);
     }
 
-    RETURN((HA7MUTEX)pst_lock);
+    RETURN((HAXMUTEX)pst_lock);
 }
 // ***************************************************************************
 // FUNCTION
-//      a7mutex_lock
+//      axmutex_lock
 // PURPOSE
 //      Lock data
 // PARAMETERS
-//      HA7MUTEX    pst_lock   -- Pointer to Mutex control structure
+//      HAXMUTEX    pst_lock   -- Pointer to Mutex control structure
 //      BOOL         b_wait -- Wait for data releasing or not
 // RESULT
 //      BOOL -- true if all is ok or false if error has occured
@@ -84,7 +84,7 @@ HA7MUTEX a7mutex_create(void)
 //      Function will not return until data released and potentially
 //      may block execution in 'wait for data releasing' mode
 // ***************************************************************************
-BOOL a7mutex_lock(HA7MUTEX  h_lock,
+BOOL axmutex_lock(HAXMUTEX  h_lock,
                   BOOL      b_wait)
 {
     BOOL                b_result    = false;
@@ -105,15 +105,15 @@ BOOL a7mutex_lock(HA7MUTEX  h_lock,
 
 // ***************************************************************************
 // FUNCTION
-//      a7mutex_unlock
+//      axmutex_unlock
 // PURPOSE
 //      Unlock data
 // PARAMETERS
-//      HA7MUTEX pst_lock -- Pointer to Mutex control structure
+//      HAXMUTEX pst_lock -- Pointer to Mutex control structure
 // RESULT
 //      BOOL -- true if all is ok or false if error has occured
 // ***************************************************************************
-BOOL a7mutex_unlock(HA7MUTEX h_lock)
+BOOL axmutex_unlock(HAXMUTEX h_lock)
 {
     BOOL                b_result    = false;
     CRITICAL_SECTION *  pst_lock    = (CRITICAL_SECTION*)h_lock;

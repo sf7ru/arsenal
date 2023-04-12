@@ -24,9 +24,8 @@
 
 #include <arsenal.h>
 
-#include <a7file.h>
+#include <axfile.h>
 
-#include <dreamix.h>
 
 #include <pvt_win.h>
 
@@ -116,12 +115,12 @@ static UINT32 FILETIMEToUNIXTime(LPFILETIME ft)
 // PURPOSE
 //
 // PARAMETERS
-//      PA7FILEFIND        pst_find      --
+//      PAXFILEFIND        pst_find      --
 //      WIN3_FIND_DATA *   pst_find_data --
 // RESULT
 //      void --
 // ***************************************************************************
-static void _copy_data(PA7FILEFIND          pst_find,
+static void _copy_data(PAXFILEFIND          pst_find,
                        WIN32_FIND_DATA *    pst_find_data)
 {
 //    SYSTEMTIME  st_systime;
@@ -159,11 +158,11 @@ static void _copy_data(PA7FILEFIND          pst_find,
 // PURPOSE
 //
 // PARAMETERS
-//      PA7FILEFIND   pst_find --
+//      PAXFILEFIND   pst_find --
 // RESULT
-//      PA7FILEFIND  --
+//      PAXFILEFIND  --
 // ***************************************************************************
-PA7FILEFIND a7file_find_destroy(PA7FILEFIND pst_find)
+PAXFILEFIND a7file_find_destroy(PAXFILEFIND pst_find)
 {
     ENTER(pst_find);
 
@@ -183,18 +182,18 @@ PA7FILEFIND a7file_find_destroy(PA7FILEFIND pst_find)
 //      PSTR    psz_path  --
 //      DWORD   u_modes --
 // RESULT
-//      PA7FILEFIND  --
+//      PAXFILEFIND  --
 // ***************************************************************************
-PA7FILEFIND a7file_find_first(PSTR psz_path, UINT u_modes)
+PAXFILEFIND a7file_find_first(PSTR psz_path, UINT u_modes)
 {
-    PA7FILEFIND         pst_find        = NULL;
+    PAXFILEFIND         pst_find        = NULL;
     WIN32_FIND_DATA     st_find_data;
 
     ENTER(psz_path);
 
-    if ((pst_find = CREATE(A7FILEFIND)) != NULL)
+    if ((pst_find = CREATE(AXFILEFIND)) != NULL)
     {
-        memset(pst_find, 0, sizeof(A7FILEFIND));
+        memset(pst_find, 0, sizeof(AXFILEFIND));
 
         if ((pst_find->p_handle = (PVOID)FindFirstFile(psz_path,
                            &st_find_data)) != INVALID_HANDLE_VALUE)
@@ -213,11 +212,11 @@ PA7FILEFIND a7file_find_first(PSTR psz_path, UINT u_modes)
 // PURPOSE
 //      Find next files
 // PARAMETERS
-//      PA7FILEFIND pst_find -- Pointer to Find control structure
+//      PAXFILEFIND pst_find -- Pointer to Find control structure
 // RESULT
 //      BOOL  -- TRUE if file was found FALSE if not
 // ***************************************************************************
-BOOL a7file_find_next(PA7FILEFIND pst_find)
+BOOL a7file_find_next(PAXFILEFIND pst_find)
 {
     BOOL                b_result        = FALSE;
     WIN32_FIND_DATA     st_find_data;

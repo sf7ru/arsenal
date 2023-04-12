@@ -13,7 +13,7 @@
 #include <windows.h>
 
 #include <arsenal.h>
-#include <a7threads.h>
+#include <axthreads.h>
 #include <pvt_threads.h>
 
 
@@ -31,7 +31,7 @@
 
 // ***************************************************************************
 // FUNCTION
-//      a7thread_exit
+//      axthread_exit
 // PURPOSE
 //      Exit thread
 // PARAMETERS
@@ -39,7 +39,7 @@
 // RESULT
 //      none
 // ***************************************************************************
-void a7thread_exit(UINT u_retcode)
+void axthread_exit(UINT u_retcode)
 {
 #if (TARGET_SYSTEM == __AX_wince__)
     ExitThread(0);
@@ -49,15 +49,15 @@ void a7thread_exit(UINT u_retcode)
 }
 // ***************************************************************************
 // FUNCTION
-//      a7thread_destroy
+//      axthread_destroy
 // PURPOSE
 //
 // PARAMETERS
-//      HA7THREAD h_thread --
+//      HAXTHREAD h_thread --
 // RESULT
-//      HA7THREAD  --
+//      HAXTHREAD  --
 // ***************************************************************************
-HA7THREAD a7thread_destroy(HA7THREAD  h_thread)
+HAXTHREAD axthread_destroy(HAXTHREAD  h_thread)
 {
     ENTER(h_thread);
 
@@ -67,23 +67,25 @@ HA7THREAD a7thread_destroy(HA7THREAD  h_thread)
 }
 // ***************************************************************************
 // FUNCTION
-//      a7thread_create
+//      axthread_create
 // PURPOSE
 //      Create thread
 // PARAMETERS
-//      HA7THREAD   * ph_thread -- Pointer to buffer for thread handle
+//      HAXTHREAD   * ph_thread -- Pointer to buffer for thread handle
 //      DWORD          d_flags   -- Creation flags
-//      PFNA7THREAD   pf_entry  -- Pointer to thread function
+//      PFNAXTHREAD   pf_entry  -- Pointer to thread function
 //      PVOID          p_param   -- User's parameter for thread function
 // RESULT
 //      BOOL
 //          true:  Thread created
 //          false: An error has occured
 // ***************************************************************************
-BOOL a7thread_create(HA7THREAD *    ph_thread,
-                     UINT           u_flags,
-                     PFNA7THREAD    pf_entry,
-                     PVOID          p_param)
+BOOL axthread_create(HAXTHREAD *        ph_thread,
+                     U32                u_flags,
+                     UINT               stackSize,
+                     UINT               priority,
+                     PFNAXTHREAD        pf_entry,
+                     PVOID              p_param)
 {
     BOOL            b_result        = false;
     HANDLE          h_thread;
@@ -99,10 +101,10 @@ BOOL a7thread_create(HA7THREAD *    ph_thread,
         if ((h_thread = (HANDLE)_beginthreadex(NULL, 0, (unsigned (__stdcall*)(void*))pf_entry, p_param, 0, NULL)) != NULL)
 #endif                                      //  #if (TARGET_SYSTEM...
         {
-//            A7TRACE((A7P, "  create h_thread = %p\n", h_thread));
+//            AXTRACE((AXP, "  create h_thread = %p\n", h_thread));
 
             if (ph_thread)
-                *ph_thread = (HA7THREAD)h_thread;
+                *ph_thread = (HAXTHREAD)h_thread;
             else
                 CloseHandle(h_thread);
 
@@ -114,18 +116,18 @@ BOOL a7thread_create(HA7THREAD *    ph_thread,
 }
 // ***************************************************************************
 // FUNCTION
-//      a7thread_priority_set
+//      axthread_priority_set
 // PURPOSE
 //
 // PARAMETERS
-//      HA7THREAD h_thread   --
+//      HAXTHREAD h_thread   --
 //      UINT       i_priority --
 // RESULT
 //      BOOL
 //          true:  All is ok
 //          false: An error has occured
 // ***************************************************************************
-BOOL a7thread_priority_set(HA7THREAD        h_thread,
+BOOL axthread_priority_set(HAXTHREAD        h_thread,
                            INT              i_priority)
 {
 #define MAC_MAP(a,b)    case a: nPriority = b; break;
@@ -153,8 +155,8 @@ BOOL a7thread_priority_set(HA7THREAD        h_thread,
     {
         b_result = SetThreadPriority(h_thread, nPriority);
     }
-    else
-        A7TRACE((A7P, "  priority %d NOT set for %p\n", i_priority, h_thread));
+    // else
+    //     AXTRACE((AXP, "  priority %d NOT set for %p\n", i_priority, h_thread));
 
 
     RETURN(b_result);
@@ -164,7 +166,7 @@ BOOL a7thread_priority_set(HA7THREAD        h_thread,
 }
 // ***************************************************************************
 // FUNCTION
-//      a7thread_get_id
+//      axthread_get_id
 // PURPOSE
 //
 // PARAMETERS
@@ -172,7 +174,7 @@ BOOL a7thread_priority_set(HA7THREAD        h_thread,
 // RESULT
 //      UINT --
 // ***************************************************************************
-UINT a7thread_get_id()
+UINT axthread_get_id()
 {
     return GetCurrentThreadId();
 }

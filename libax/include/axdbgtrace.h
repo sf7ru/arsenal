@@ -103,18 +103,23 @@ void                axdbg_quit                  (PCSTR              psz_desc);
         !( (defined(DBGFULL)  || defined(DBGSYS) || defined(DEBUG)) &&  \
            (defined(DBGTRACE) || defined(APPTRACE)) )               )
 
+#ifndef _MSC_VER
 #ifndef AXTRACE
 #define AXTRACE(...)        {}
 #endif
-
+#else 
+#define AXTRACE
+#endif
 
 #else
 
+#ifndef _MSC_VER
 #ifndef AXTRACE
 #ifdef APPTRACE
 #define AXTRACE(...)        { app_trace(__AXPLACE__, ##__VA_ARGS__); }
 #else
 #define AXTRACE(...)        { axdbg_trace(__AXPLACE__, ##__VA_ARGS__); }
+#endif
 #endif
 #endif
 

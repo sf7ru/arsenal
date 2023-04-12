@@ -16,7 +16,7 @@
 #include <windows.h>
 
 #include <arsenal.h>
-#include <dreamix.h>
+#include <axsystem.h>
 
 
 // ---------------------------------------------------------------------------
@@ -26,15 +26,15 @@
 
 // ***************************************************************************
 // FUNCTION
-//      la6_event_destroy
+//      axevent_destroy
 // PURPOSE
 //      Destroy Event control structure
 // PARAMETERS
-//      HLA6EVENT h_event -- Handler of Event
+//      HAXEVENT h_event -- Handler of Event
 // RESULT
-//      HLA6EVENT -- Always NULL
+//      HAXEVENT -- Always NULL
 // ***************************************************************************
-HLA6EVENT la6_event_destroy(HLA6EVENT h_event)
+HAXEVENT axevent_destroy(HAXEVENT h_event)
 {
     if (h_event)
         CloseHandle((HANDLE)h_event);
@@ -44,33 +44,33 @@ HLA6EVENT la6_event_destroy(HLA6EVENT h_event)
 
 // ***************************************************************************
 // FUNCTION
-//      la6_event_create
+//      axevent_create
 // PURPOSE
 //      Create Event control structure
 // PARAMETERS
 //      BOOL      b_initial      -- Initial state of event
 //      BOOL      b_manual_reset -- Make ability for manual event reset
 // RESULT
-//      HLA6EVENT  -- Handler of a new createtd Event control structure
+//      HAXEVENT  -- Handler of a new createtd Event control structure
 //                    or NULL
 // ***************************************************************************
-HLA6EVENT la6_event_create(BOOL b_initial, BOOL b_manual_reset)
+HAXEVENT axevent_create(BOOL b_initial, BOOL b_manual_reset)
 {
-    return (HLA6EVENT)CreateEvent(NULL, b_manual_reset, b_initial, NULL);
+    return (HAXEVENT)CreateEvent(NULL, b_manual_reset, b_initial, NULL);
 }
 
 // ***************************************************************************
 // FUNCTION
-//      la6_event_wait
+//      axevent_wait
 // PURPOSE
 //      Wait for event
 // PARAMETERS
-//      HLA6EVENT h_event    -- Handler of Event
+//      HAXEVENT h_event    -- Handler of Event
 //      DWORD     d_timeout  -- Timeout in msecs
 // RESULT
 //      BOOL  -- TRUE if event happen or FALSE if not
 // ***************************************************************************
-BOOL la6_event_wait(HLA6EVENT h_event, DWORD d_timeout)
+BOOL axevent_wait(HAXEVENT h_event, UINT d_timeout)
 {
     BOOL    b_result = FALSE;
 
@@ -87,11 +87,11 @@ BOOL la6_event_wait(HLA6EVENT h_event, DWORD d_timeout)
 
 // ***************************************************************************
 // FUNCTION
-//      la6_event_wait_multi
+//      axevent_wait_multi
 // PURPOSE
 //
 // PARAMETERS
-//      HLA6EVENT   * ph_events     --
+//      HAXEVENT   * ph_events     --
 //      UINT          u_number        --
 //      DWORD         d_timeout_msecs -- Waiting period, can be DEFWAIT_INFINITE
 // RESULT
@@ -100,9 +100,9 @@ BOOL la6_event_wait(HLA6EVENT h_event, DWORD d_timeout)
 //          DEFWAIT_TIMEOUT:    Waitinf timeout
 //          Other:              Index of happen event
 // ***************************************************************************
-DWORD la6_event_wait_multi(HLA6EVENT *      ph_events,
+UINT axevent_wait_multi(HAXEVENT *      ph_events,
                            UINT             u_number,
-                           DWORD            d_timeout_msecs)
+                           UINT            d_timeout_msecs)
 {
     DWORD       d_selected      = DEFWAIT_ERROR;
     DWORD       d_result;
@@ -129,16 +129,16 @@ DWORD la6_event_wait_multi(HLA6EVENT *      ph_events,
 
 // ***************************************************************************
 // FUNCTION
-//      la6_event_set
+//      axevent_set
 // PURPOSE
 //      Set state of event
 // PARAMETERS
-//      HLA6EVENT h_event    -- Handler of Event
+//      HAXEVENT h_event    -- Handler of Event
 //      BOOL      b_signaled -- State of event
 // RESULT
 //      BOOL  -- TRUE if all is ok or FALSE if error has occured
 // ***************************************************************************
-BOOL la6_event_set(HLA6EVENT h_event, BOOL b_signaled)
+BOOL axevent_set(HAXEVENT h_event, BOOL b_signaled)
 {
     BOOL    b_result = FALSE;
 

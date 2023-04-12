@@ -4,7 +4,7 @@
 // PROJECT
 //      Arsenal Library
 // NOTE
-//      This implemela6tion of System Service mechanism is NOT REENTIRABLE!
+//      This implemeAXtion of System Service mechanism is NOT REENTIRABLE!
 //      That means that you unable to use 'la6_service_reborn' more than once
 // ***************************************************************************
 // FILE
@@ -19,10 +19,7 @@
 
 #include <arsenal.h>
 
-#include <dreamix.h>
-
-#if (TARGET_SYSTEM != __AX_wince__)
-
+#include <AXService.h>
 
 //#define WIN32_LEAN_AND_MEAN
 //#include <windows.h>
@@ -35,7 +32,7 @@
 // ----------------------------- STATIC DATA ---------------------------------
 // ---------------------------------------------------------------------------
 
-static PLA6SERVICECTL   g_pst_ctrl   = NULL;
+static PAXSERVICECTL   g_pst_ctrl   = NULL;
 
 
 // ---------------------------------------------------------------------------
@@ -51,13 +48,13 @@ static PLA6SERVICECTL   g_pst_ctrl   = NULL;
 /*
 // ***************************************************************************
 // STRUCTURE
-//      LA6DMN_INT_CTRL
+//      AXDMN_INT_CTRL
 // ***************************************************************************
-typedef struct __tag_LA6DMN_INT_CTRL
+typedef struct __tag_AXDMN_INT_CTRL
 {
     SERVICE_STATUS          st_status;
     SERVICE_STATUS_HANDLE   h_status;
-} LA6DMN_INT_CTRL, * PLA6DMN_INT_CTRL;
+} AXDMN_INT_CTRL, * PAXDMN_INT_CTRL;
 */
 
 // ---------------------------------------------------------------------------
@@ -135,47 +132,47 @@ static BOOL _set_status(SERVICE_STATUS_HANDLE       h_status,
 // ***************************************************************************
 static void _la6_service_WRAPPER_sig_handler(DWORD d_control)
 {
-    A7SIG      d_sig   = A7SIG_NONE;
+    AXSIG      d_sig   = AXSIG_NONE;
 
     if (g_pst_ctrl)
     {
         switch (d_control)
         {
-            case SERVICE_CONTROL_PAUSE:     d_sig = A7SIG_INTR;    break;
-            case SERVICE_CONTROL_CONTINUE:  d_sig = A7SIG_GO;      break;
-            case SERVICE_CONTROL_SHUTDOWN:  d_sig = A7SIG_PWR;     break;
+            case SERVICE_CONTROL_PAUSE:     d_sig = AXSIG_INTR;    break;
+            case SERVICE_CONTROL_CONTINUE:  d_sig = AXSIG_GO;      break;
+            case SERVICE_CONTROL_SHUTDOWN:  d_sig = AXSIG_PWR;     break;
 
             case SERVICE_CONTROL_STOP:
-                d_sig = A7SIG_QUIT;
+                d_sig = AXSIG_QUIT;
 
                 _set_status(STATUSHANDLE, SERVICE_STOP_PENDING, 0);
                 break;
         }
 
-        if (d_sig != A7SIG_NONE)
+        if (d_sig != AXSIG_NONE)
             (*g_pst_ctrl->pfn_sig_handler)(g_pst_ctrl, d_sig);
     }
 }
 static BOOL WINAPI _consoleHandler(DWORD CEvent)
 {
     BOOL        b_result    = FALSE;
-    A7SIG       d_sig       = A7SIG_NONE;
+    AXSIG       d_sig       = AXSIG_NONE;
 
     switch(CEvent)
     {
         case CTRL_C_EVENT:          // CTRL+C
         case CTRL_BREAK_EVENT:      // CTRL+BREAK
-            d_sig = A7SIG_QUIT;
+            d_sig = AXSIG_QUIT;
             break;
 
         case CTRL_CLOSE_EVENT:      // Program close
         case CTRL_LOGOFF_EVENT:     // User logoff
         case CTRL_SHUTDOWN_EVENT:   // Power shutdown
-            d_sig = A7SIG_PWR;
+            d_sig = AXSIG_PWR;
             break;
     }
 
-    if (d_sig != A7SIG_NONE)
+    if (d_sig != AXSIG_NONE)
     {
         (*g_pst_ctrl->pfn_sig_handler)(g_pst_ctrl, d_sig);
         b_result = TRUE;
@@ -183,7 +180,7 @@ static BOOL WINAPI _consoleHandler(DWORD CEvent)
 
     return b_result;
 }
-void la6_service_sighandler(PLA6SERVICECTL pst_ctrl)
+void la6_service_sighandler(PAXSERVICECTL pst_ctrl)
 {
     g_pst_ctrl = pst_ctrl;
     SetConsoleCtrlHandler((PHANDLER_ROUTINE)_consoleHandler, TRUE);
@@ -206,9 +203,9 @@ static void _la6_service_WRAPPER_main(DWORD d_argc, LPCSTR * ppsz_argv)
     if (g_pst_ctrl)
     {
         d_code =
-            ((g_pst_ctrl->d_features & LA6DMN_CAN_STOP)     ? SERVICE_ACCEPT_STOP           : 0) |
-            ((g_pst_ctrl->d_features & LA6DMN_CAN_PAUSE)    ? SERVICE_ACCEPT_PAUSE_CONTINUE : 0) |
-            ((g_pst_ctrl->d_features & LA6DMN_CAN_SHUTDOWN) ? SERVICE_ACCEPT_SHUTDOWN       : 0) ;
+            ((g_pst_ctrl->d_features & AXDMN_CAN_STOP)     ? SERVICE_ACCEPT_STOP           : 0) |
+            ((g_pst_ctrl->d_features & AXDMN_CAN_PAUSE)    ? SERVICE_ACCEPT_PAUSE_CONTINUE : 0) |
+            ((g_pst_ctrl->d_features & AXDMN_CAN_SHUTDOWN) ? SERVICE_ACCEPT_SHUTDOWN       : 0) ;
 
         g_pst_ctrl->d_features = d_code;
 
@@ -240,11 +237,11 @@ static void _la6_service_WRAPPER_main(DWORD d_argc, LPCSTR * ppsz_argv)
 // PURPOSE
 //      Spawn to Service
 // PARAMETERS
-//      PLA6SERVICECTL pst_ctrl -- Pointer to Control structure
+//      PAXSERVICECTL pst_ctrl -- Pointer to Control structure
 // RESULT
 //      BOOL -- TRUE if all is ok or FALSE if error has occured
 // ***************************************************************************
-BOOL la6_service_reborn(PLA6SERVICECTL pst_ctrl)
+BOOL la6_service_reborn(PAXSERVICECTL pst_ctrl)
 {
     BOOL                    b_result            = FALSE;
 
@@ -285,11 +282,11 @@ BOOL la6_service_register(PSTR psz_name, PSTR psz_desc, PSTR psz_user, PSTR psz_
     BOOL        b_result            = FALSE;
     SC_HANDLE   schService;
     SC_HANDLE   schSCManager;
-    CHAR        sz_module           [A7LPATH];
+    CHAR        sz_module           [AXLPATH];
 
 
     if (psz_name &&
-        la6_module_get_filename(sz_module, A7LPATH))
+        axmodule_get_filename(sz_module, AXLPATH))
     {
         if ((schSCManager = OpenSCManager(NULL, NULL, SC_MANAGER_CREATE_SERVICE)) != NULL)
         {
@@ -352,4 +349,3 @@ BOOL la6_service_unregister(PSTR psz_name)
     return b_result;
 }
 
-#endif                                      //  #if (TARGET_SYSTEM...

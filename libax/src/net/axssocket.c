@@ -20,7 +20,9 @@
 #include <pvt_net.h>
 
 #include <axstring.h>
-#include <sys/socket.h>
+#include <axlog.h>
+
+#include <pvt_net.h>
 
 // ---------------------------------------------------------------------------
 // -------------------------------- FUNCTIONS --------------------------------

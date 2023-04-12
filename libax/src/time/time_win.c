@@ -18,7 +18,7 @@
 #include <windows.h>
 
 #include <arsenal.h>
-#include <dreamix.h>
+#include <axtime.h>
 
 #include <pvt_win.h>
 
@@ -33,11 +33,11 @@
 // PURPOSE
 //      Get current time
 // PARAMETERS
-//      PA7DATE pst_time -- Pointer to Time structure
+//      PAXDATE pst_time -- Pointer to Time structure
 // RESULT
 //      none
 // ***************************************************************************
-void a7time_get_date(PA7DATE     pst_time)
+void a7time_get_date(PAXDATE     pst_time)
 {
     SYSTEMTIME st_time;
 
@@ -45,7 +45,7 @@ void a7time_get_date(PA7DATE     pst_time)
     {
         GetSystemTime(&st_time);
 
-        MAC_TIME_WIN2LA6(pst_time, (&st_time));
+        MAC_TIME_WIN2AX(pst_time, (&st_time));
     }
 }
 /*
@@ -55,13 +55,13 @@ void a7time_get_date(PA7DATE     pst_time)
 // PURPOSE
 //
 // PARAMETERS
-//      PA7DATE pst_time --
+//      PAXDATE pst_time --
 // RESULT
 //      BOOL
 //          TRUE:  All is ok
 //          FALSE: An error has occured
 // ***************************************************************************
-BOOL a7time_set_rtc(PA7DATE pst_time)
+BOOL a7time_set_rtc(PAXDATE pst_time)
 {
     FIXME("implement");
 
@@ -74,13 +74,13 @@ BOOL a7time_set_rtc(PA7DATE pst_time)
 // PURPOSE
 //
 // PARAMETERS
-//      PA7DATE pst_time --
+//      PAXDATE pst_time --
 // RESULT
 //      BOOL
 //          TRUE:  All is ok
 //          FALSE: An error has occured
 // ***************************************************************************
-BOOL a7time_set(PA7DATE pst_time)
+BOOL a7time_set(PAXDATE pst_time)
 {
     FIXME("implement");
 
@@ -212,25 +212,25 @@ time_t timegm(struct tm *tm)
 // PURPOSE
 //
 // PARAMETERS
-//      PA7DATE pst_time --
+//      PAXDATE pst_time --
 // RESULT
-//      A7TIME --
+//      AXTIME --
 // ***************************************************************************
-A7TIME a7time_pack(PA7DATE  pst_time)
+AXTIME a7time_pack(PAXDATE  pst_time)
 {
-    A7TIME          result      = 0;
+    AXTIME          result      = 0;
     struct tm       tm;
 
     ENTER(TRUE);
 
     memset(&tm, 0, sizeof(tm));
 
-    tm.tm_year  = pst_time->u_year - 1900;
-    tm.tm_mon   = pst_time->u_month - 1;
-    tm.tm_mday  = pst_time->u_day;
-    tm.tm_hour  = pst_time->u_hour;
-    tm.tm_min   = pst_time->u_minute;
-    tm.tm_sec   = pst_time->u_second;
+    tm.tm_year  = pst_time->year - 1900;
+    tm.tm_mon   = pst_time->month - 1;
+    tm.tm_mday  = pst_time->day;
+    tm.tm_hour  = pst_time->hour;
+    tm.tm_min   = pst_time->minute;
+    tm.tm_sec   = pst_time->second;
 
     result      = timegm(&tm);
 

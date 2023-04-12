@@ -37,7 +37,9 @@ typedef enum
 //   #define XS2_01   1, 1
 //   PORTPIN led1Pin = PP_PIN(PP_OUT, XS2_01);
 //   PORTPIN led2Pin = PP_PIN(PP_OUT_MODE, XS2_01, 0);
+#ifndef _MSC_VER
 #define PP_PIN(a,...)                              a(__VA_ARGS__)
+#endif 
 
 #define PP_PORT_MAX                             0b111
 #define PP_PIN_MAX                              0b11111

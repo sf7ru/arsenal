@@ -18,8 +18,6 @@
 // ----------------------------- DEFINITIONS ---------------------------------
 // ---------------------------------------------------------------------------
 
-typedef int                      BOOLEAN;
-
 #if (TARGET_FAMILY == __AX_win__)
 typedef long long               FILESIZEINT;
 #define S_ISDIR(a)              (((a) & S_IFDIR) == S_IFDIR)
@@ -44,6 +42,7 @@ typedef int                      BOOL;
 #       define strcmpi          _stricmp
 #endif                                      //  #if (TARGET_SYSTEM...
 #elif (TARGET_FAMILY == __AX_unix__)
+typedef int                      BOOLEAN;
 #include <unistd.h>
 #include <limits.h>
 typedef int                     BOOL;

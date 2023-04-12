@@ -21,7 +21,7 @@
 
 #include <arsenal.h>
 
-#include <dreamix.h>
+#include <axsystem.h>
 
 
 // ---------------------------------------------------------------------------
@@ -40,9 +40,9 @@
 // RESULT
 //      DWORD   -- Number of retrieved symbols
 // ***************************************************************************
-DWORD la6_module_get_filename(PSTR psz_buffer, DWORD d_size)
+INT axmodule_get_filename(PSTR psz_buffer, INT d_size)
 {
-    DWORD   d_ret_size = 0;
+    INT   d_ret_size = 0;
 
     if (psz_buffer && d_size)
         d_ret_size = GetModuleFileName(NULL, psz_buffer, d_size);
@@ -61,12 +61,12 @@ DWORD la6_module_get_filename(PSTR psz_buffer, DWORD d_size)
 // RESULT
 //      DWORD   -- Number of retrieved symbols
 // ***************************************************************************
-DWORD la6_module_get_path(PSTR psz_buffer, DWORD d_size)
+INT axmodule_get_path(PSTR psz_buffer, INT d_size)
 {
     DWORD   d_ret_size = 0;
     PSTR    psz_tmp;
 
-    if ((d_ret_size = la6_module_get_filename(psz_buffer, d_size)) != 0)
+    if ((d_ret_size = axmodule_get_filename(psz_buffer, d_size)) != 0)
     {
         if ( ((psz_tmp = strrchr(psz_buffer, '\\')) !=  NULL)   ||
              ((psz_tmp = strrchr(psz_buffer, '/'))  !=  NULL)   )

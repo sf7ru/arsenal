@@ -46,6 +46,13 @@
 
 #define AXDEVCTL_GETFD      100
 
+// ------------------ Definition related to wait operations ------------------
+
+#define DEFWAIT_INFINITE       ((DWORD)-1)
+#define DEFWAIT_ERROR          ((DWORD)-1)
+#define DEFWAIT_TIMEOUT        ((DWORD)-2)
+
+
 // -------------------------- LA6PROCESSATTRIB -------------------------------
 
 typedef UINT                    AXPROCESSATTRIB;

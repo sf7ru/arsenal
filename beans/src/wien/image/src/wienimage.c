@@ -44,7 +44,7 @@ PWIENIMAGE wienimage_create(UINT               width,
 
     if ((result = CREATE(WIENIMAGE)) != nil)
     {
-        result->pitch = ceil((float)depth / 8 * width);
+        result->pitch = (UINT)ceil((float)depth / 8 * width);
         // printf("width = %d, height = %d, depth = %d, pitch = %d, size = %d\n", 
         //     width, height, depth, result->pitch, result->pitch * height);
 

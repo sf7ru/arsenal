@@ -50,11 +50,13 @@ INT axringbuff_write(PAXRINGBUFF        buff,
                      INT                size)
 {
     INT         result          = -1;
+    INT         tail;
+    INT         left;
 
     ENTER(true);
 
-    INT tail = buff->tail;
-    INT left = buff->size - tail;
+    tail = buff->tail;
+    left = buff->size - tail;
 
     if (left >= size)
     {

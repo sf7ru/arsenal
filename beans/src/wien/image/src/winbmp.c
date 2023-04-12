@@ -99,8 +99,8 @@ PWIENIMAGE wienimage_load_winbmp(PSTR p_filename)
                     {
                         // Resolving palette from WinBMP format
                         for (d_cnt = 0; d_cnt < (1 << st_BMP_IH.biBitCount); d_cnt++)
-                            *(PU32    )(image->palette + (d_cnt * 3)) =
-                                PALRGB2RAWRGB(*(PU32    )(image->palette + (d_cnt << 2)));
+                            *(PU32    )((char*)image->palette + (d_cnt * 3)) =
+                                PALRGB2RAWRGB(*(PU32    )((char*)image->palette + (d_cnt << 2)));
 
                         for (d_cnt = 0; d_cnt < (1 << st_BMP_IH.biBitCount) * 3; d_cnt++)
                             *(((PU8)image->palette) + d_cnt) >>= 2;

@@ -571,3 +571,4 @@ BOOL AXSerial::setBaudrate(UINT baudrate)
 */
 
 
+R

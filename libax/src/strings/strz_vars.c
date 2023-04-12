@@ -25,6 +25,7 @@ double strz_atof(PCSTR s)
     double  rez = 0;
     double  fact = 1;
     int     point_seen;
+    int     d;
 
     if (*s == '-')
     {
@@ -40,7 +41,7 @@ double strz_atof(PCSTR s)
           continue;
         };
 
-        int d = *s - '0';
+        d = *s - '0';
 
         if (d >= 0 && d <= 9)
         {

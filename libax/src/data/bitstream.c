@@ -195,7 +195,7 @@ HBITSTREAM bitstream_create(PVOID p_data, UINT d_size, U8 b_stream_format)
             memset(pst_bits, 0, sizeof(AXBITSTREAM));
             pst_bits->p_data            = p_data;
             pst_bits->p_curr_data       = p_data;
-            pst_bits->p_EOD             = p_data + d_size;
+            pst_bits->p_EOD             = (char*)(p_data) + d_size;
             pst_bits->b_stream_format   = b_stream_format;
         }
     }
