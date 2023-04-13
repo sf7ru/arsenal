@@ -5,7 +5,7 @@
 //      Arsenal Library
 // NOTE
 //      This implemeAXtion of System Service mechanism is NOT REENTIRABLE!
-//      That means that you unable to use 'la6_service_reborn' more than once
+//      That means that you unable to use 'axservice_reborn' more than once
 // ***************************************************************************
 // FILE
 //      $Id: service.c,v 1.3 2003/08/06 12:25:58 A.Kozhukhar Exp $
@@ -122,7 +122,7 @@ static BOOL _set_status(SERVICE_STATUS_HANDLE       h_status,
 }
 // ***************************************************************************
 // STATIC FUNCTION
-//      _la6_service_WRAPPER_sig_handler
+//      _axservice_WRAPPER_sig_handler
 // PURPOSE
 //      Main signal handler function of Service
 // PARAMETERS
@@ -130,7 +130,7 @@ static BOOL _set_status(SERVICE_STATUS_HANDLE       h_status,
 // RESULT
 //      none
 // ***************************************************************************
-static void _la6_service_WRAPPER_sig_handler(DWORD d_control)
+static void _axservice_WRAPPER_sig_handler(DWORD d_control)
 {
     AXSIG      d_sig   = AXSIG_NONE;
 
@@ -180,14 +180,14 @@ static BOOL WINAPI _consoleHandler(DWORD CEvent)
 
     return b_result;
 }
-void la6_service_sighandler(PAXSERVICECTL pst_ctrl)
+void axservice_sighandler(PAXSERVICECTL pst_ctrl)
 {
     g_pst_ctrl = pst_ctrl;
     SetConsoleCtrlHandler((PHANDLER_ROUTINE)_consoleHandler, TRUE);
 }
 // ***************************************************************************
 // STATIC FUNCTION
-//      _la6_service_WRAPPER_main
+//      _axservice_WRAPPER_main
 // PURPOSE
 //      Main function of Service
 // PARAMETERS
@@ -196,7 +196,7 @@ void la6_service_sighandler(PAXSERVICECTL pst_ctrl)
 // RESULT
 //      none
 // ***************************************************************************
-static void _la6_service_WRAPPER_main(DWORD d_argc, LPCSTR * ppsz_argv)
+static void _axservice_WRAPPER_main(DWORD d_argc, LPCSTR * ppsz_argv)
 {
     DWORD       d_code;
 
@@ -213,7 +213,7 @@ static void _la6_service_WRAPPER_main(DWORD d_argc, LPCSTR * ppsz_argv)
 
         if ((g_pst_ctrl->p_int_ctrl = (PVOID)
                 RegisterServiceCtrlHandler(g_pst_ctrl->psz_name,
-                    (LPHANDLER_FUNCTION)_la6_service_WRAPPER_sig_handler))
+                    (LPHANDLER_FUNCTION)_axservice_WRAPPER_sig_handler))
                                             != (SERVICE_STATUS_HANDLE)0)
         {
             _set_status(STATUSHANDLE, SERVICE_RUNNING, 0);
@@ -233,7 +233,7 @@ static void _la6_service_WRAPPER_main(DWORD d_argc, LPCSTR * ppsz_argv)
 }
 // ***************************************************************************
 // FUNCTION
-//      la6_service_reborn
+//      axservice_reborn
 // PURPOSE
 //      Spawn to Service
 // PARAMETERS
@@ -241,13 +241,13 @@ static void _la6_service_WRAPPER_main(DWORD d_argc, LPCSTR * ppsz_argv)
 // RESULT
 //      BOOL -- TRUE if all is ok or FALSE if error has occured
 // ***************************************************************************
-BOOL la6_service_reborn(PAXSERVICECTL pst_ctrl)
+BOOL axservice_reborn(PAXSERVICECTL pst_ctrl)
 {
     BOOL                    b_result            = FALSE;
 
     SERVICE_TABLE_ENTRY     st_dispatch_table   [] =
     {
-        { NULL, (LPSERVICE_MAIN_FUNCTION)_la6_service_WRAPPER_main   },
+        { NULL, (LPSERVICE_MAIN_FUNCTION)_axservice_WRAPPER_main   },
         { NULL, NULL                                                }
     };
 
@@ -266,7 +266,7 @@ BOOL la6_service_reborn(PAXSERVICECTL pst_ctrl)
 }
 // ***************************************************************************
 // FUNCTION
-//      la6_service_register
+//      axservice_register
 // PURPOSE
 //      Register current executable as System Service
 // PARAMETERS
@@ -277,7 +277,7 @@ BOOL la6_service_reborn(PAXSERVICECTL pst_ctrl)
 // RESULT
 //      BOOL -- TRUE if all is ok or FALSE if error has occured
 // ***************************************************************************
-BOOL la6_service_register(PSTR psz_name, PSTR psz_desc, PSTR psz_user, PSTR psz_passwd)
+BOOL axservice_register(PSTR psz_name, PSTR psz_desc, PSTR psz_user, PSTR psz_passwd)
 {
     BOOL        b_result            = FALSE;
     SC_HANDLE   schService;
@@ -318,7 +318,7 @@ BOOL la6_service_register(PSTR psz_name, PSTR psz_desc, PSTR psz_user, PSTR psz_
 }
 // ***************************************************************************
 // FUNCTION
-//      la6_service_unregister
+//      axservice_unregister
 // PURPOSE
 //      Unregister current executable as System Service
 // PARAMETERS
@@ -326,7 +326,7 @@ BOOL la6_service_register(PSTR psz_name, PSTR psz_desc, PSTR psz_user, PSTR psz_
 // RESULT
 //      BOOL -- TRUE if all is ok or FALSE if error has occured
 // ***************************************************************************
-BOOL la6_service_unregister(PSTR psz_name)
+BOOL axservice_unregister(PSTR psz_name)
 {
     BOOL        b_result            = FALSE;
     SC_HANDLE   schService;

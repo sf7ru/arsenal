@@ -74,7 +74,6 @@ typedef struct fixed_header_t
     U16     connect_msg_t      : 4;
     U16     remaining_length   : 8;    
 }fixed_header_t;
-
 BOOL Mqtt::_connect(UINT           TO)
 {
     BOOL        result          = false;
@@ -86,7 +85,7 @@ BOOL Mqtt::_connect(UINT           TO)
         U8 var_header[] =
                {
                    0,                         // MSB(strlen(PROTOCOL_NAME)) but 0 as messages must be < 127
-                   strlen(PROTOCOL_NAME),     // LSB(strlen(PROTOCOL_NAME)) is redundant
+                   (U8)strlen(PROTOCOL_NAME),     // LSB(strlen(PROTOCOL_NAME)) is redundant
                    'M','Q','I','s','d','p',
                    PROTOCOL_VERSION,
                    CLEAN_SESSION,
@@ -95,26 +94,29 @@ BOOL Mqtt::_connect(UINT           TO)
                };
 
         // set up payload for connect message
-        U8 payload[2+strlen(clientid)];
-        payload[0] = 0;
-        payload[1] = strlen(clientid);
-        memcpy(&payload[2],clientid,strlen(clientid));
+        int payloadSize = 2 + (int)strlen(clientid);
 
         // fixed header: 2 bytes, big endian
-        U8 fixed_header[] = { SET_MESSAGE(CONNECT), U8(sizeof(var_header)+sizeof(payload)) };
+        U8 fixed_header[] = { SET_MESSAGE(CONNECT), U8(sizeof(var_header) + payloadSize) };
 //        printf("fixed_header[] = %X %X\n", fixed_header[0], fixed_header[1]);
         
 //      fixed_header_t  fixed_header = { .QoS = 0, .connect_msg_t = CONNECT, .remaining_length = sizeof(var_header)+strlen(broker->clientid) };
 
-        U8 packet[sizeof(fixed_header)+sizeof(var_header)+sizeof(payload)];
+        //U8 packet[sizeof(fixed_header)+sizeof(var_header) + payloadSize];
+        int packetSize = sizeof(fixed_header) + sizeof(var_header) + payloadSize;
 
-        memset(packet,0,sizeof(packet));
-        memcpy(packet,fixed_header,sizeof(fixed_header));
-        memcpy(packet+sizeof(fixed_header),var_header,sizeof(var_header));
-        memcpy(packet+sizeof(fixed_header)+sizeof(var_header),payload,sizeof(payload));
+        //memset(packet,0,sizeof(packet));
+        memcpy(tmpBuff,fixed_header,sizeof(fixed_header));
+        memcpy(tmpBuff+sizeof(fixed_header),var_header,sizeof(var_header));
+
+        PU8 onPayload = tmpBuff+sizeof(fixed_header)+sizeof(var_header);
+
+        onPayload[0] = 0;
+        onPayload[1] = (U8)strlen(clientid);
+        memcpy(&onPayload[2],clientid,strlen(clientid));
 
         // send Connect message
-        if (axdev_write(sock, packet, sizeof(packet), TO) == (INT)sizeof(packet))
+        if (axdev_write(sock, tmpBuff, packetSize, TO) == packetSize)
         {
             U8 buffer[4];
             // It's OK read here
@@ -184,31 +186,35 @@ BOOL Mqtt::_subscribe(PMQTTSUBSRIBTION sub,
 
     U8 var_header[] = { MSB(MESSAGE_ID), LSB(MESSAGE_ID) };    // appended to end of PUBLISH message
 
-    topicLen = strlen(sub->topic);
+    topicLen = (UINT)strlen(sub->topic);
 
     // utf topic
-    U8 utf_topic[2 + topicLen + 1 ]; // 2 for message size
+    //U8 utf_topic[2 + topicLen + 1 ]; // 2 for message size
+    int  topicSize = 2 + topicLen + 1;
 
-    // set up topic payload
-    utf_topic[0] = 0;                       // MSB(topicLen);
-    utf_topic[1] = LSB(topicLen);
-    memcpy((char *) &utf_topic[2], sub->topic, topicLen);
-    utf_topic[2 + topicLen] = sub->qos;
-
-    U8 fixed_header[] = { SET_MESSAGE(SUBSCRIBE) | 0x2, U8(sizeof(var_header) + sizeof(utf_topic)) };
+    U8 fixed_header[] = { SET_MESSAGE(SUBSCRIBE) | 0x2, U8(sizeof(var_header) + topicSize) };
     
     //    fixed_header_t  fixed_header = { .QoS = 0, .connect_msg_t = SUBSCRIBE, .remaining_length = sizeof(var_header)+strlen(utf_topic) };
 
-    U8 packet[sizeof(fixed_header) + sizeof(var_header) + sizeof(utf_topic)];
+    int packetSize  = sizeof(fixed_header) + sizeof(var_header) + topicSize;
 
-    memset(packet, 0, sizeof(packet));
-    memcpy(packet, &fixed_header, sizeof(fixed_header));
-    memcpy(packet + sizeof(fixed_header), var_header, sizeof(var_header));
-    memcpy(packet + sizeof(fixed_header) + sizeof(var_header), utf_topic, sizeof(utf_topic));
+    memset(tmpBuff, 0, packetSize);
+    memcpy(tmpBuff, &fixed_header, sizeof(fixed_header));
+    memcpy(tmpBuff + sizeof(fixed_header), var_header, sizeof(var_header));
+
+    PU8 onTopic = tmpBuff + sizeof(fixed_header) + sizeof(var_header);
+
+    // set up topic payload
+    onTopic[0] = 0;                       // MSB(topicLen);
+    onTopic[1] = LSB(topicLen);
+    memcpy((char *) &onTopic[2], sub->topic, topicLen);
+    onTopic[2 + topicLen] = sub->qos;
+
+//    memcpy(tmpBuff + sizeof(fixed_header) + sizeof(var_header), utf_topic, sizeof(utf_topic));
 
     //strz_dump("SUB REQ ", packet, sizeof(packet));
 
-    if (axdev_write(sock, packet, sizeof(packet), TO) == (INT)sizeof(packet))
+    if (axdev_write(sock, tmpBuff, packetSize, TO) == (INT)packetSize)
     {
         //printf("sent SUBSCRIBE for %s\n", sub->topic);
         result = true;
@@ -453,14 +459,10 @@ INT Mqtt::publish(PCSTR          topic,
     if (qos == QoS0)
     {
         // utf topic
-        U8 utf_topic[2 + topicLen]; // 2 for message size QoS-0 does not have msg ID
+        //U8 utf_topic[2 + topicLen]; // 2 for message size QoS-0 does not have msg ID
+        int utf_topicSize = 2 + topicLen; 
 
-        // set up topic payload
-        utf_topic[0] = 0;                       // MSB(topicLen);
-        utf_topic[1] = LSB(topicLen);
-        memcpy((char *) &utf_topic[2], topic, topicLen);
-
-        unsigned len        =  sizeof(utf_topic) + msgLen;
+        unsigned len        =  utf_topicSize + msgLen;
         unsigned headerLen  = sizeof(U8);
                     headerLen += VAR_SIZE_SZ(len);
 
@@ -469,14 +471,21 @@ INT Mqtt::publish(PCSTR          topic,
                             (flags & MQTT_FLAG_RETAIN ? 1 : 0)), VAR_SIZE_0(len), VAR_SIZE_1(len) };
         //    fixed_header_t  fixed_header = { .QoS = 0, .connect_msg_t = PUBLISH, .remaining_length = sizeof(utf_topic)+msgLen };
 
-        int packetLen = headerLen + sizeof(utf_topic) + msgLen;
+        int packetLen = headerLen + utf_topicSize + msgLen;
 
         if (MQTT_BUFF_SIZE >= packetLen)
         {
             memset(outBuff, 0, packetLen);
             memcpy(outBuff, &fixed_header, headerLen);
-            memcpy(outBuff + headerLen, utf_topic, sizeof(utf_topic));
-            memcpy(outBuff + headerLen + sizeof(utf_topic), msg, msgLen);
+            //memcpy(outBuff + headerLen, utf_topic, sizeof(utf_topic));
+            PU8 onTopic = outBuff + headerLen;
+
+            // set up topic payload
+            onTopic[0] = 0;                       // MSB(topicLen);
+            onTopic[1] = LSB(topicLen);
+            memcpy((char *) &onTopic[2], topic, topicLen);
+
+            memcpy(outBuff + headerLen + utf_topicSize, msg, msgLen);
 
             result = axdev_write(sock, outBuff, packetLen, TO) == packetLen;
         }
@@ -489,27 +498,30 @@ INT Mqtt::publish(PCSTR          topic,
     {
         pubMsgID++;
         // utf topic
-        U8 utf_topic[2 + topicLen + 2]; // 2 extra for message size > QoS0 for msg ID
+        //U8 utf_topic[2 + topicLen + 2]; // 2 extra for message size > QoS0 for msg ID
+        int utf_topicSize = 2 + topicLen + 2; 
 
-        // set up topic payload
-        utf_topic[0] = 0;                       // MSB(topicLen);
-        utf_topic[1] = LSB(topicLen);
-        memcpy((char *) &utf_topic[2], topic, topicLen);
-        utf_topic[sizeof(utf_topic) - 2] = MSB(pubMsgID);
-        utf_topic[sizeof(utf_topic) - 1] = LSB(pubMsgID);
 
-        unsigned len        =  sizeof(utf_topic) + msgLen;
+        unsigned len        =  utf_topicSize + msgLen;
         unsigned headerLen  = (sizeof(U8) + VAR_SIZE_SZ(len));
         U8 fixed_header[] = { U8(SET_MESSAGE(PUBLISH) | (qos << 1)), VAR_SIZE_0(len), VAR_SIZE_1(len) };
 
-        int packetLen = headerLen + sizeof(utf_topic) + msgLen;
+        int packetLen = headerLen + utf_topicSize + msgLen;
 
         if (MQTT_BUFF_SIZE >= packetLen)
         {
             memset(outBuff, 0, packetLen);
             memcpy(outBuff, &fixed_header, headerLen);
-            memcpy(outBuff + headerLen, utf_topic, sizeof(utf_topic));
-            memcpy(outBuff + headerLen + sizeof(utf_topic), msg, msgLen);
+            //memcpy(outBuff + headerLen, utf_topic, sizeof(utf_topic));
+            PU8 onTopic = outBuff + headerLen;
+            // set up topic payload
+            onTopic[0] = 0;                       // MSB(topicLen);
+            onTopic[1] = LSB(topicLen);
+            memcpy((char *) &onTopic[2], topic, topicLen);
+            onTopic[utf_topicSize - 2] = MSB(pubMsgID);
+            onTopic[utf_topicSize - 1] = LSB(pubMsgID);
+
+            memcpy(outBuff + headerLen + utf_topicSize, msg, msgLen);
 
             if (axdev_write(sock, outBuff, packetLen, TO) == (INT) packetLen)
             {

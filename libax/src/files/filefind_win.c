@@ -154,7 +154,7 @@ static void _copy_data(PAXFILEFIND          pst_find,
 }
 // ***************************************************************************
 // FUNCTION
-//      a7file_find_destroy
+//      axfile_find_destroy
 // PURPOSE
 //
 // PARAMETERS
@@ -162,7 +162,7 @@ static void _copy_data(PAXFILEFIND          pst_find,
 // RESULT
 //      PAXFILEFIND  --
 // ***************************************************************************
-PAXFILEFIND a7file_find_destroy(PAXFILEFIND pst_find)
+PAXFILEFIND axfile_find_destroy(PAXFILEFIND pst_find)
 {
     ENTER(pst_find);
 
@@ -175,7 +175,7 @@ PAXFILEFIND a7file_find_destroy(PAXFILEFIND pst_find)
 }
 // ***************************************************************************
 // FUNCTION
-//      a7file_find_first
+//      axfile_find_first
 // PURPOSE
 //
 // PARAMETERS
@@ -184,7 +184,7 @@ PAXFILEFIND a7file_find_destroy(PAXFILEFIND pst_find)
 // RESULT
 //      PAXFILEFIND  --
 // ***************************************************************************
-PAXFILEFIND a7file_find_first(PSTR psz_path, UINT u_modes)
+PAXFILEFIND axfile_find_first(PSTR psz_path, UINT u_modes)
 {
     PAXFILEFIND         pst_find        = NULL;
     WIN32_FIND_DATA     st_find_data;
@@ -201,14 +201,14 @@ PAXFILEFIND a7file_find_first(PSTR psz_path, UINT u_modes)
             _copy_data(pst_find, &st_find_data);
         }
         else
-            pst_find = a7file_find_destroy(pst_find);
+            pst_find = axfile_find_destroy(pst_find);
     }
 
     RETURN(pst_find);
 }
 // ***************************************************************************
 // FUNCTION
-//      a7file_find_next
+//      axfile_find_next
 // PURPOSE
 //      Find next files
 // PARAMETERS
@@ -216,7 +216,7 @@ PAXFILEFIND a7file_find_first(PSTR psz_path, UINT u_modes)
 // RESULT
 //      BOOL  -- TRUE if file was found FALSE if not
 // ***************************************************************************
-BOOL a7file_find_next(PAXFILEFIND pst_find)
+BOOL axfile_find_next(PAXFILEFIND pst_find)
 {
     BOOL                b_result        = FALSE;
     WIN32_FIND_DATA     st_find_data;

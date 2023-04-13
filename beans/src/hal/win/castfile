@@ -11,24 +11,12 @@
 ##      $Log:$
 ## ***************************************************************************
 
-BEAN_NAME	:= hal@arsenal/beans
+BEAN_NAME	:= hal/win@arsenal/beans
 
-BEAN_DEPEND	:= 				\
-dev/extmem@arsenal/beans	\
-dev/rtc@arsenal/beans		\
+BEAN_DEPEND	:= hal@arsenal/beans threadsx@arsenal/libax
 
 BEAN_FILES	:=	\
-CommonHal.cpp		\
-strz_from_hal.c		\
+WinHal.cpp			\
 
-ifneq (win,$(HOST))
-BEAN_FILES	+=
-I2cDevice.cpp		\
-SpiDevice.cpp		\
-Spi.cpp			\
-I2c.cpp			\
-hid_keyboard.c		\
-
-endif
 
 include $(PATH_MAKEFILES)/Castfile
