@@ -114,7 +114,7 @@ HAXSOCKET axusocket_open(PSTR       psz_iface,
             }
             else
             {
-                AXTRACE((AXP, "DSOCK OPEN FAILED, address = '%s' : %d", psz_iface, u_port));
+                AXTRACE((0, "DSOCK OPEN FAILED, address = '%s' : %d", psz_iface, u_port));
                 pst_socket = (PAXSOCKET)axusocket_close((HAXSOCKET)pst_socket);
             }
         }
@@ -150,7 +150,7 @@ BOOL axusocket_mcast_set_noloop(HAXSOCKET    h_socket)
     }
 #if (TARGET_FAMILY == __AX_win__)
     else
-        AXTRACE((AXP, "WSA error: %d", WSAGetLastError()));
+        AXTRACE((0, "WSA error: %d", WSAGetLastError()));
 #endif                                      //  #if (TARGET_FAMILY...
 
     RETURN(b_result);
@@ -189,7 +189,7 @@ BOOL axusocket_mcast_set_group(HAXSOCKET    h_socket,
     }
 #if (TARGET_FAMILY == __AX_win__)
     else
-        AXTRACE((AXP, "WSA error: %d", WSAGetLastError()));
+        AXTRACE((0, "WSA error: %d", WSAGetLastError()));
 #elif (TARGET_FAMILY == __AX_unix__)
     else
         perror("setsockopt: ");

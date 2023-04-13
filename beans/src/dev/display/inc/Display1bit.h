@@ -83,13 +83,13 @@ public:
                                                  int            w,
                                                  int            h,
                                                  UINT           color,
-                                                 PCSTR          message) override;
+                                                 PCSTR          message) ; // override;
 
         void            box                     (int            x1,
                                                  int            y1,
                                                  int            width,
                                                  int            height,
-                                                 UINT           color) override;
+                                                 UINT           color) ; // override;
 
         void            rect                    (int            x1,
                                                  int            y1,
@@ -97,7 +97,7 @@ public:
                                                  int            height,
                                                  UINT           color);
 
-        void            clear                   (UINT           color) override;
+        void            clear                   (UINT           color) ; // override;
 
 };
 
