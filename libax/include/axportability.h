@@ -29,10 +29,10 @@ typedef int                      BOOL;
 #   define LA6IMPORTNAME        __declspec(dllimport)
 #   if (BUILD_TOOL != __AX_gcc__)
 #       define LL                   "I64"
-#       define snprintf             _snprintf
-#       define atoll                _atoi64
-#       define strtoull             _strtoi64
-#       define vsnprintf            _vsnprintf
+//#       define snprintf             _snprintf
+//#       define atoll                _atoi64
+//#       define strtoull             _strtoi64
+//#       define vsnprintf            _vsnprintf
 #   else
 #       define LL                   "ll"
 #   endif

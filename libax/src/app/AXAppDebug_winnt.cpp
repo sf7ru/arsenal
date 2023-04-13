@@ -16,11 +16,13 @@
 #include <windows.h>
 #include <DbgHelp.h>
 
-#include <a7file.h>
+#include <axfile.h>
 
-#include <a7string.h>
-#include <dreamix.h>
+#include <axstring.h>
+#include <axsystem.h>
 #include <AXApp.h>
+#include <string.h>
+#include <stdio.h>
 
 // ---------------------------------------------------------------------------
 // ---------------------------------- TYPES ----------------------------------
@@ -90,7 +92,7 @@ LONG TopLevelFilter(struct _EXCEPTION_POINTERS *pExceptionInfo )
             else
                 fname_get_path(baseDir, AXLPATH, path);
 
-            if (la6_path_create(baseDir))
+            if (axpath_create(baseDir))
             {
                 GetLocalTime(&systemTime);
 
@@ -108,7 +110,7 @@ LONG TopLevelFilter(struct _EXCEPTION_POINTERS *pExceptionInfo )
                                  pExceptionInfo->ExceptionRecord->ExceptionCode,
                                  count++);
 
-                    if (!a7file_exist(path))
+                    if (!axfile_exist(path))
                     {
                         if ((hFile = ::CreateFile(path, GENERIC_WRITE, FILE_SHARE_WRITE, NULL,
                                         CREATE_ALWAYS,

@@ -57,9 +57,9 @@ public:
 
         BOOL            setBaudrate             (UINT           baudrate);
 
-        void            setDtr                  (BOOLEAN        value);
+        void            setDtr                  (BOOL           value);
 
-        void            setRts                  (BOOLEAN        value);
+        void            setRts                  (BOOL           value);
 
         INT             getPendingTx            ();
 

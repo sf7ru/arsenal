@@ -21,7 +21,7 @@ typedef signed short int16_t;
 typedef unsigned char uint8_t;
 typedef signed char int8_t;
 
-typedef unsigned char bool;
+//typedef unsigned char bool;
 
 
 #endif // #define __STDINT__H__

@@ -518,7 +518,7 @@ BOOL AXApp::setDefaultConfig(void)
 
 #else
 
-        if (la6_module_get_path(configFilename, AXLPATH))
+        if (axmodule_get_path(configFilename, AXLPATH))
         {
             strz_sformat(configFilename, AXLPATH,
                  "%s/%s/%s", configFilename, resPSTR(4) ? resPSTR(4) : "." , resPSTR(3));
