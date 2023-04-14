@@ -41,7 +41,7 @@ typedef short                   I16;
 
 typedef unsigned long           ULONG;
 
-#if !defined(true) && !defined(_MSC_VER)
+#if !defined(true) && (!defined(_MSC_VER) || (defined(_MSC_VER) && !defined(__cplusplus)))
 #define true                    (BOOL)1
 #define false                   (BOOL)0
 #endif

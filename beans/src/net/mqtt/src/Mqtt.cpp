@@ -451,8 +451,8 @@ INT Mqtt::publish(PCSTR          topic,
 
     ENTER(true);
 
-    int msgLen = strlen(msg);
-    int topicLen = strlen(topic);
+    int msgLen = (int)strlen(msg);
+    int topicLen = (int)strlen(topic);
 
     //printf("< '%s' '%s'\n", topic, msg);
 
