@@ -52,7 +52,7 @@ class PAXDEVWrapper: public AXDevice
 
 public:
                         ~PAXDEVWrapper          (void)
-                        { axdev_close(dev, (UINT)-1); }
+                        { if (dev != nil) axdev_close(dev, (UINT)-1); }
 
                         PAXDEVWrapper           (PAXDEV         theDev)
                         { dev = theDev; }

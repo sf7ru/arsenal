@@ -122,6 +122,7 @@ public:
 
                             lastKA              = 0;
                             kaTimeout           = 10;
+                            wrapper             = nil;
                         }
 
         BOOL            connect                 (PCSTR          client,

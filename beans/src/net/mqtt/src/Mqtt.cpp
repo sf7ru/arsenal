@@ -73,7 +73,8 @@ typedef struct fixed_header_t
     U16     DUP                : 1;
     U16     connect_msg_t      : 4;
     U16     remaining_length   : 8;    
-}fixed_header_t;
+} fixed_header_t;
+
 BOOL Mqtt::_connect(UINT           TO)
 {
     BOOL        result          = false;
@@ -166,9 +167,11 @@ BOOL Mqtt::connect(PCSTR          client,
     strz_cpy(this->server_ip, server_ip, sizeof(this->server_ip));
     strz_cpy(this->clientid, client, sizeof(this->clientid));
 
-    if (_connect(TO))
+    SAFEDELETE(wrapper);
+
+    if ((wrapper = new PAXDEVWrapper(nil)) != nil)
     {
-        if ((wrapper = new PAXDEVWrapper(sock)) != nil)
+        if (_connect(TO))
         {
             result = inBuff.open2(wrapper, inBuffData, sizeof(inBuffData), EOLMODE_any);
         }
