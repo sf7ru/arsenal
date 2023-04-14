@@ -22,7 +22,7 @@ CommonHal.cpp		\
 strz_from_hal.c		\
 
 ifneq (win,$(HOST))
-BEAN_FILES	+=
+BEAN_FILES	+=		\
 I2cDevice.cpp		\
 SpiDevice.cpp		\
 Spi.cpp			\
