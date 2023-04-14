@@ -438,8 +438,8 @@ INT Mqtt::publish(PCSTR          topic,
                   UINT           TO)
 {
 #define VAR_SIZE_SZ(l)    ((l > 127) ? 2 : 1)
-#define VAR_SIZE_0(l)     ((l > 127) ? (l | 0x80) : len)
-#define VAR_SIZE_1(l)     ((l > 127) ? (l >> 7) : 0)
+#define VAR_SIZE_0(l)     (U8)((l > 127) ? (l | 0x80) : len)
+#define VAR_SIZE_1(l)     (U8)((l > 127) ? (l >> 7) : 0)
 
     INT         result          = -1;
 
@@ -561,7 +561,7 @@ BOOL Mqtt::keepAlive(UINT           TO)
 {
     BOOL        result          = false;
     AXTIME      now;
-    int         rd;
+//    int         rd;
 
     ENTER(true);
 
