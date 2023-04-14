@@ -402,13 +402,13 @@ BOOL axfile_times_get(PAXDATE pst_c_time, PAXDATE pst_a_time, PAXDATE pst_m_time
                 SystemTimeToTzSpecificLocalTime(NULL, &st_sys_m_time, &st_tcsys_m_time);
 
                 if (pst_c_time)
-                    MAC_TIME_WIN2LA6(pst_c_time, (&st_tcsys_c_time));
+                    MAC_TIME_WIN2AX(pst_c_time, (&st_tcsys_c_time));
 
                 if (pst_a_time)
-                    MAC_TIME_WIN2LA6(pst_a_time, (&st_tcsys_a_time));
+                    MAC_TIME_WIN2AX(pst_a_time, (&st_tcsys_a_time));
 
                 if (pst_m_time)
-                    MAC_TIME_WIN2LA6(pst_m_time, (&st_tcsys_m_time));
+                    MAC_TIME_WIN2AX(pst_m_time, (&st_tcsys_m_time));
 
                 b_result = true;
             }

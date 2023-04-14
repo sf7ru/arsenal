@@ -10,8 +10,8 @@
 //      $Author: A.Kozhukhar $
 // ***************************************************************************
 
-#ifndef __LA6WIN_PRIVATEH__
-#define __LA6WIN_PRIVATEH__
+#ifndef __AXWIN_PRIVATEH__
+#define __AXWIN_PRIVATEH__
 
 #include <arsenal.h>
 
@@ -36,15 +36,15 @@
 
 // ***************************************************************************
 // STRUCTURE
-//      LA6PIPE
+//      AXPIPE
 // PURPOSE
 //
 // ***************************************************************************
-typedef struct __tag_LA6PIPE
+typedef struct __tag_AXPIPE
 {
     HANDLE              h_in;
     HANDLE              h_out;
-} LA6PIPE, * PLA6PIPE;
+} AXPIPE, * PAXPIPE;
 
 // ***************************************************************************
 // STRUCTURE
@@ -95,4 +95,4 @@ int             _la6_nonblk_file_write          (HANDLE     h_file,
 #endif                                      //  #ifdef __cplusplus
 
 
-#endif                                      //  #ifndef __LA6WIN32_PRIVATEH__
+#endif                                      //  #ifndef __AXWIN32_PRIVATEH__

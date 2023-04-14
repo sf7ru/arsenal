@@ -25,7 +25,7 @@ static WSADATA      st_WSA_data;
 
 // ***************************************************************************
 // FUNCTION
-//      a7socket_start
+//      axsocket_start
 // PURPOSE
 //      Start Sockets support
 // PARAMETERS
@@ -33,7 +33,7 @@ static WSADATA      st_WSA_data;
 // RESULT
 //      TRUE if all is ok or FALSE if error has occured
 // ***************************************************************************
-BOOL a7socket_start(void)
+BOOL axsocket_start(void)
 {
 #ifndef __GNUC__
     return !WSAStartup(MAKEWORD( 2, 2 ), &st_WSA_data);
@@ -43,7 +43,7 @@ BOOL a7socket_start(void)
 }
 // ***************************************************************************
 // FUNCTION
-//      a7socket_stop
+//      axsocket_stop
 // PURPOSE
 //
 // PARAMETERS
@@ -51,7 +51,7 @@ BOOL a7socket_start(void)
 // RESULT
 //      void  --
 // ***************************************************************************
-void a7socket_stop(void)
+void axsocket_stop(void)
 {
 #ifndef __GNUC__
     WSACleanup();
@@ -59,7 +59,7 @@ void a7socket_stop(void)
 }
 // ***************************************************************************
 // FUNCTION
-//      _a7ssocket_connect_nb
+//      _axssocket_connect_nb
 // PURPOSE
 //
 // PARAMETERS
@@ -70,7 +70,7 @@ void a7socket_stop(void)
 // RESULT
 //      BOOL  --
 // ***************************************************************************
-BOOL _a7ssocket_connect_nb(PSSOCKDEV            pst_dev,
+BOOL _axssocket_connect_nb(PSSOCKDEV            pst_dev,
                            struct sockaddr *    pst_sa,
                            UINT                 u_sa_size,
                            UINT                 u_TO_msec)
@@ -111,7 +111,7 @@ BOOL _a7ssocket_connect_nb(PSSOCKDEV            pst_dev,
 // RESULT
 //      BOOL --
 // ***************************************************************************
-BOOL _a7socket_is_connected(SOCKET v_sock)
+BOOL _axsocket_is_connected(SOCKET v_sock)
 {
     BOOL                b_result    = FALSE;
     UINT                u_tmp;
@@ -142,7 +142,7 @@ BOOL _a7socket_is_connected(SOCKET v_sock)
 }
 // ***************************************************************************
 // FUNCTION
-//      a7ssocket_error
+//      axssocket_error
 // PURPOSE
 //
 // PARAMETERS
@@ -150,7 +150,7 @@ BOOL _a7socket_is_connected(SOCKET v_sock)
 // RESULT
 //      UINT  --
 // ***************************************************************************
-UINT a7socket_error(void)
+UINT axsocket_error(void)
 {
     UINT            error  = 0;
 

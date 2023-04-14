@@ -72,6 +72,7 @@ protected:
 
         U8              inBuffData              [ MQTT_BUFF_SIZE ];
         U8              outBuff                 [ MQTT_BUFF_SIZE ];
+        U8              tmpBuff                 [ MQTT_BUFF_SIZE ];
 
         AXBuffer        inBuff;
 

@@ -37,7 +37,7 @@
 // RESULT
 //      none
 // ***************************************************************************
-void a7time_get_date(PAXDATE     pst_time)
+void axdate_get(PAXDATE     pst_time)
 {
     SYSTEMTIME st_time;
 
@@ -47,6 +47,39 @@ void a7time_get_date(PAXDATE     pst_time)
 
         MAC_TIME_WIN2AX(pst_time, (&st_time));
     }
+}
+void axdate_get_local(PAXDATE     pst_time)
+{
+    time_t          st_time;
+    struct tm *     pst_tm;
+
+    time(&st_time);
+
+    memset(pst_time, 0, sizeof(AXDATE));
+    pst_time->day   = 1;
+    pst_time->month = 1;
+    pst_time->year  = 1900;
+
+    if ((pst_tm = localtime(&st_time)) != NULL)
+    {
+        pst_time->hour          = (U16)pst_tm->tm_hour;
+        pst_time->minute        = (U16)pst_tm->tm_min;
+        pst_time->second        = (U16)pst_tm->tm_sec;
+        pst_time->milliseconds  = 0;
+
+        pst_time->day          += (U16)pst_tm->tm_mday - 1;
+        pst_time->month        += (U16)pst_tm->tm_mon;
+        pst_time->year         += (U16)pst_tm->tm_year;
+        pst_time->day_of_week   = (U16)pst_tm->tm_wday;
+    }
+}
+AXUTIME axutime_get()
+{
+    time_t          v_now;
+
+    v_now = time(NULL);
+
+    return (AXUTIME)v_now;
 }
 /*
 // ***************************************************************************
@@ -97,7 +130,7 @@ BOOL a7time_set(PAXDATE pst_time)
 // RESULT
 //      none
 // ***************************************************************************
-void a7sleep(DWORD d_mseconds)
+void axsleep(UINT d_mseconds)
 {
     Sleep(d_mseconds);
 }
@@ -112,7 +145,7 @@ void a7sleep(DWORD d_mseconds)
 // RESULT
 //      ULONG   --
 // ***************************************************************************
-ULONG la6_clock_get_ticks_per_sec(void)
+ULONG axclock_get_ticks_per_sec(void)
 {
     return CLOCKS_PER_SEC;
 }
@@ -127,7 +160,7 @@ ULONG la6_clock_get_ticks_per_sec(void)
 // RESULT
 //      ULONG   --
 // ***************************************************************************
-ULONG la6_clock(void)
+ULONG axclock(void)
 {
     return clock();
 }
@@ -141,7 +174,7 @@ ULONG la6_clock(void)
 // RESULT
 //      ULONG   --
 // ***************************************************************************
-ULONG la6_random(void)
+ULONG axrandom(void)
 {
     ULONG               u_value         = 0;
     SYSTEMTIME          st_time;
@@ -216,7 +249,7 @@ time_t timegm(struct tm *tm)
 // RESULT
 //      AXTIME --
 // ***************************************************************************
-AXTIME a7time_pack(PAXDATE  pst_time)
+AXTIME axtime_pack(PAXDATE  pst_time)
 {
     AXTIME          result      = 0;
     struct tm       tm;

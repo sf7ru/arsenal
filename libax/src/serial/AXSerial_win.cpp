@@ -20,7 +20,7 @@
 
 AXSerial::AXSerial(void)
 {
-    dev = NULL;
+    dev = nil;
 }
 AXSerial::~AXSerial(void)
 {
@@ -33,23 +33,23 @@ BOOL AXSerial::close(void)
         dev = (PAXDEV)serial_close(dev);
     }
 
-    return dev == NULL ? TRUE : FALSE;
+    return dev == nil ? true : false;
 }
 BOOL AXSerial::isOpen(void)
 {
-    return dev == NULL ? FALSE : TRUE;
+    return dev == nil ? false : true;
 }
 BOOL AXSerial::open(PSERIALPROPS  props,
                     UINT          type)
 {
-    return ((dev = serial_open(props, type)) != NULL) ? TRUE : FALSE;
+    return ((dev = serial_open(props, type)) != nil) ? true : false;
 }
 BOOL AXSerial::open(PSERIALPROPS   props,
                     UINT           type,
                     PCSTR          name)
 {
-    return ((dev = serial_open(props, type)) != NULL) ? TRUE : FALSE;
-//    return ((dev = serial_open_x(props, type, name)) != NULL) ? TRUE : FALSE;
+    return ((dev = serial_open(props, type)) != nil) ? true : false;
+//    return ((dev = serial_open_x(props, type, name)) != nil) ? true : false;
 }
 INT AXSerial::read(PVOID            data,
                    INT              size,
@@ -65,7 +65,7 @@ INT AXSerial::write(PCVOID          data,
 }
 BOOL AXSerial::setBaudrate(UINT baudrate)
 {
-    BOOL                b_result    = FALSE;
+    BOOL                b_result    = false;
 
     return b_result;
 }
