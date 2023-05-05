@@ -55,11 +55,10 @@ public:
                         }
 
                         Display1bit             (PU8           buffer,
-                                                 UINT          depth,
                                                  UINT          width,
                                                  UINT          height)
                         {
-                            setDimensions(width, height, depth);
+                            setDimensions(width, height, 1);
                             setBuffer(buffer);
                         }
 

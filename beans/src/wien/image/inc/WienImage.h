@@ -15,6 +15,12 @@
 // ------------------------------- DEFINITIONS -------------------------------
 // -----|-------------------|-------------------------------------------------
 
+#define DEFAULTVGAPAL_BLACK 0 
+#define DEFAULTVGAPAL_WHITE 15
+#define DEFAULTVGAPAL_RED   32
+#define DEFAULTVGAPAL_BLUE  40
+#define DEFAULTVGAPAL_GREEN 48
+
 #define WIENIMAGE_PALETTE_SZ    (256 * 3)
 
 // ---------------------------------------------------------------------------
@@ -30,7 +36,8 @@ typedef struct _tag_WIENIMAGE
     PVOID                   bitmap;
 
     PVOID                   palette;
-    U8                      transparent;
+    U32                     transparentColor;
+    U32                     defaultColor;
 
     struct
     {

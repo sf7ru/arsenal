@@ -40,6 +40,13 @@ typedef AXPACKED(struct) __tag_FONTFV1
     U8          bnk2size;
 } FONTFV1, * PFONTFV1;
 
+typedef AXPACKED(struct) __tag_DISPPOINT
+{
+    int         x;
+    int         y;
+} DISPPOINT, * PDISPPOINT;
+
+
 // ---------------------------------------------------------------------------
 // --------------------------------- CLASSES ---------------------------------
 // -----|---------------|-----------------------(|--------------|-------------
@@ -71,6 +78,19 @@ protected:
 
 
         void            setPitch                (UINT           width);
+
+        BOOL            drawNonT                (PU8 			buff,
+                                                 int            x,
+                                                 int            y,
+                                                 UINT           width,
+                                                 UINT           height);
+
+        BOOL            drawT                   (PU8 			buff,
+                                                 int            x,
+                                                 int            y,
+                                                 UINT           width,
+                                                 UINT           height,
+                                                 int            color);
 
 public:
                         Display                 ()
@@ -170,12 +190,25 @@ virtual void            clear                   (UINT           color) = 0;
 
 virtual void            setPixel                (UINT           x,
                                                  UINT           y,
-                                                 UINT           color) {};
+                                                 UINT           color) = 0;
 
+virtual void            tiltedRect              (int            x,
+                                                 int            y,
+                                                 UINT           width,
+                                                 UINT           height,
+                                                 int            angle,
+                                                 UINT           color);
+
+virtual BOOL            draw                    (PU8 			buff,
+                                                 int            x,
+                                                 int            y,
+                                                 UINT           width,
+                                                 UINT           height,
+                                                 int 			transparentColor)
+        {return transparentColor != -1 ? drawT(buff,x,y,width,height,transparentColor) : drawNonT(buff,x,y,width,height); }
 
         void            update                  ()
         { applyBuffer(0, 0, mWidth, mHeight); validate(); }
-
 };
 
 #endif // #ifdef __cplusplus

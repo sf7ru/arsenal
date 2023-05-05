@@ -11,8 +11,8 @@
 //      $Log$
 // ***************************************************************************
 
-#ifndef __Display4bit_H__
-#define __Display4bit_H__
+#ifndef __Display8bit_H__
+#define __Display8bit_H__
 
 #include <Display.h>
 
@@ -20,7 +20,7 @@
 // --------------------------------- CLASSES ---------------------------------
 // -----|---------------|-----------------------(|--------------|-------------
 
-class Display4bit: public Display
+class Display8bit: public Display
 {
 protected:
 
@@ -28,33 +28,26 @@ protected:
                                                          PU8            buff,
                                                          U8             color)
         {
-            if (x & 1)
-            {
-                *buff = (*buff & 0xF0) | (color & 0xF);
-                buff++;
-            }
-            else
-            {
-                *buff = (*buff & 0x0F) | ((color << 4) & 0xF0);
-            }
+            *(buff + x) = color;
 
             return buff;
         }
 
 public:
-                        Display4bit             ()
+                        Display8bit             ()
                         {
 
                         }
 
 
-                        Display4bit             (PU8           buffer,
+                        Display8bit             (PU8           buffer,
                                                  UINT          width,
                                                  UINT          height)
                         {
-                            setDimensions(width, height, 4);
+                            setDimensions(width, height, 8);
                             setBuffer(buffer);
                         }
+
 
         void            setPixel                (UINT           x,
                                                  UINT           y,
@@ -88,5 +81,5 @@ public:
         void            clear                   (UINT           color) override;
 };
 
-#endif // #define __Display4bit_H__
+#endif // #define __Display8bit_H__
 

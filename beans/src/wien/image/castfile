@@ -21,6 +21,7 @@ targa.c		\
 winbmp.c	\
 colordepth.c	\
 vga_default_palette.c \
+WienImageDraw.cpp	\
 
 
 

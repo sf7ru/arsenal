@@ -50,9 +50,11 @@ PWIENIMAGE wienimage_create(UINT               width,
 
         if ((result->bitmap = MALLOC(result->pitch * height)) != nil)
         {
-            result->width   = width;
-            result->height  = height;
-            result->depth   = depth;
+            result->width               = width;
+            result->height              = height;
+            result->depth               = depth;
+            result->defaultColor        = -1;
+            result->transparentColor    = -1;
 
             if ((depth > 1) && (depth <= 8))
             {
@@ -93,7 +95,7 @@ PWIENIMAGE wienimage_copy(PWIENIMAGE         img)
                 result->flags.staticPalette = true;
                 result->palette             = img->palette;
             }
-            else if ((result->palette = strz_memdup(img->palette, WIENIMAGE_PALETTE_SZ)) == nil)
+            else if (img->palette && ((result->palette = strz_memdup(img->palette, WIENIMAGE_PALETTE_SZ)) == nil))
             {
                 result = wienimage_destroy(result);
             }

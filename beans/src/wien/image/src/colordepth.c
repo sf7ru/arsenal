@@ -57,9 +57,6 @@ extern unsigned char vga_default_palette[ 256 * 3 ];
 static BOOL _dither_1_to_8(PWIENIMAGE tgt,
                            PWIENIMAGE src)
 {
-#define  VGARGB_BLACK       0
-#define  VGARGB_WHITE       15
-
     BOOL     result = true;
     UINT    i;
     UINT    j;
@@ -67,8 +64,29 @@ static BOOL _dither_1_to_8(PWIENIMAGE tgt,
     PU8     onS;
     UINT    w;
     PU8     onT;
+    int     color1  = -1;
+    int     color0  = -1;
 
     onT = tgt->bitmap;
+
+    if (src->transparentColor != -1)
+    {
+        if (src->transparentColor)
+        {
+            color0 = (src->defaultColor != -1) ? src->defaultColor : DEFAULTVGAPAL_BLACK;
+        }
+        else
+        {
+            color1 = (src->defaultColor != -1) ? src->defaultColor : DEFAULTVGAPAL_WHITE;
+        }
+    }
+    else
+    {
+        color0 = DEFAULTVGAPAL_BLACK;
+        color1 = src->defaultColor != -1 ? src->defaultColor : DEFAULTVGAPAL_WHITE;
+    }
+
+    //color = src->defaultColor != -1 ? src->defaultColor : DEFAULTVGAPAL_WHITE;
 
     for (j = 0; j < src->height; j++)
     {
@@ -79,7 +97,20 @@ static BOOL _dither_1_to_8(PWIENIMAGE tgt,
         {
             for (b = 7; w && (b >= 0); b--)
             {
-                *(onT++) = ((*onS) >> b) & 1 ? VGARGB_WHITE : VGARGB_BLACK;
+                //*(onT++) = ((*onS) >> b) & 1 ? VGARGB_WHITE : VGARGB_BLACK;
+
+                if (((*onS) >> b) & 1)
+                {
+                    if (color1 != -1)
+                        *(onT) = color1;
+                }
+                else
+                {
+                    if (color0 != -1)
+                        *(onT) = color0;
+                }
+                
+                onT++;
                 w--;
             }
 

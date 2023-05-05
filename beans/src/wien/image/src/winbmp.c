@@ -143,10 +143,11 @@ PWIENIMAGE wienimage_load_winbmp(PSTR p_filename)
                             }
 
                             // Storing parameters
-                            image->width       = st_BMP_IH.biWidth;
-                            image->height      = st_BMP_IH.biHeight;
-                            image->depth       = st_BMP_IH.biBitCount;
-                            image->transparent = -1;
+                            image->width            = st_BMP_IH.biWidth;
+                            image->height           = st_BMP_IH.biHeight;
+                            image->depth            = st_BMP_IH.biBitCount;
+                            image->transparentColor = -1;
+                            image->defaultColor     = -1;
                         }
                     }
                     else

@@ -17,7 +17,6 @@ BEAN_DEPEND	:=
 
 BEAN_FILES	:=	\
 Wien.cpp		\
-FrameBuffer1bit.cpp	\
 
 include $(PATH_MAKEFILES)/Castfile
 

@@ -20,6 +20,7 @@ Display.cpp		\
 Display1bit.cpp		\
 Display1bitTilted.cpp		\
 Display4bit.cpp		\
+Display8bit.cpp		\
 
 
 include $(PATH_MAKEFILES)/Castfile
