@@ -400,7 +400,7 @@ static BOOL _MspInit(UINT port, SERIALTYPE type, UINT flags)
                     PA9     ------> USART1_TX
                     PA10     ------> USART1_RX
                     */
-                    GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_10;
+                    GPIO_InitStruct.Pin = (SERIALFLAG_rxonly & flags ? 0 : GPIO_PIN_9) | GPIO_PIN_10;
                     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
                     GPIO_InitStruct.Pull = GPIO_PULLUP;
                     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;

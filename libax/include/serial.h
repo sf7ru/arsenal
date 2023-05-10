@@ -79,6 +79,7 @@
 // For STM32
 #define SERIALFLAG_lowpower         1
 #define SERIALFLAG_pushpull         2
+#define SERIALFLAG_rxonly           4
 
 #define SERIALPROPS_BAUDRATE(br)    (br > 1000000 ? br / 1000 | 1 : br / 100)
 #define SERIALPROPS_UNBAUDRATE(br)  (br & 1 ? (br & ~1) * 1000 : br * 100)
