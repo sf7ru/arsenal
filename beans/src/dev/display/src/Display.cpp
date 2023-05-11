@@ -142,7 +142,7 @@ void Display::tiltedRect(int            x,
 	float cy	= y;
 	float w		= (float)width  / 2;
 	float h		= (float)height / 2;
-	float rot	= (float)angle  / 57.2957795131;
+	float rot	= (float)-angle  / 57.2957795131;
 
 	float sxx =  cos(rot);
 	float sxy = -sin(rot);
@@ -165,7 +165,7 @@ void Display::tiltedRect(int            x,
 	line(x3, y3, x2, y2, color);
 	line(x4, y4, x3, y3, color);
 }
-BOOL Display::drawT(PU8 			buff,
+BOOL Display::drawT(PU8 		   buff,
 					int            x,
 					int            y,
 					UINT           width,
@@ -194,12 +194,12 @@ BOOL Display::drawT(PU8 			buff,
 	else
 		w = mWidth - x;
 
-    for (int j = 0; j < h; j++)
+    for (UINT j = 0; j < h; j++)
     {
 		onT = onBuff + ((y + j) * mPitch);
 		onS = buff + (j * pitch);
 
-		for (int i = 0; i < w; i++)
+		for (UINT i = 0; i < w; i++)
 		{
 			color = *(onS + i);
 
@@ -218,7 +218,7 @@ BOOL Display::drawNonT(PU8 			  buff,
                    	   UINT           width,
                    	   UINT           height)
 {
-    int 	color;
+    //int 	color;
 	UINT 	h;
 	UINT 	pitch		= PITCH(width);
 	PU8 	onBuff		= mBuffer + PITCH(x);
@@ -238,10 +238,102 @@ BOOL Display::drawNonT(PU8 			  buff,
 	else
 		pitchCopy = PITCH(mWidth - x);
 
-    for (int j = 0; j < h; j++)
+    for (UINT j = 0; j < h; j++)
     {
 		memcpy(onBuff + ((y + j) * mPitch), buff + (j * pitch), pitchCopy);
     }
 
     return true;
 }
+BOOL Display::tiltedDraw(int            x1,
+						 int            y1,
+						 PWIENIMAGE     image,
+						 int            cx,
+						 int            cy,
+						 double         angle)
+{
+	WIENIMAGEFASTREAD 	fr;
+    int x,y,xx,yy,xs,ys;
+    double s,c,fx,fy;
+    xs=image->width;
+    ys=image->height;
+
+	if (wienimage_fastread_prepare(&fr, image))
+	{
+		c=cos(MAC_DEG2RAD(angle));
+		s=sin(MAC_DEG2RAD(angle));
+		// loop all dst pixels
+		for (y=0;y<ys;y++)
+		{
+			for (x=0;x<xs;x++)
+			{
+				// compute position in src
+				fx=x;       // convert to double
+				fy=y;
+				fx-=cx;     // translate to center of rotation
+				fy-=cy;
+				xx=double(+(fx*c)+(fy*s)+cx);   // rotate and translate back
+				yy=double(-(fx*s)+(fy*c)+cy);
+				// copy pixels
+				if ((xx>=0)&&(xx<xs)&&(yy>=0)&&(yy<ys)) 
+				{
+					U32 color = wienimage_fastread(&fr, xx, yy);
+
+					if (color != image->transparentColor)
+					{
+						setPixel(x1 + x - cx, y1 + y - cy, color);
+					}
+				}
+				//else setPixel(x,y, image->0; // black
+			}
+		}
+	}
+
+    return true;
+}
+
+/*
+#include <math.h> // just for cos,sin
+
+// rotate src around x0,y0 [pixels] by angle [rad] and store result in dst
+void rotate(Graphics::TBitmap *dst,Graphics::TBitmap *src,double x0,double y0,double angle)
+    {
+    int x,y,xx,yy,xs,ys;
+    double s,c,fx,fy;
+    // resize dst to the same size as src
+    xs=src->Width;
+    ys=src->Height;
+    dst->SetSize(xs,ys);
+    // allow direct pixel access for src
+    src->HandleType=bmDIB;
+    src->PixelFormat=pf32bit;
+    DWORD **psrc=new DWORD*[ys];
+    for (y=0;y<ys;y++) psrc[y]=(DWORD*)src->ScanLine[y];
+    // allow direct pixel access for dst
+    dst->HandleType=bmDIB;
+    dst->PixelFormat=pf32bit;
+    DWORD **pdst=new DWORD*[ys];
+    for (y=0;y<ys;y++) pdst[y]=(DWORD*)dst->ScanLine[y];
+    // precompute variables
+    c=cos(angle);
+    s=sin(angle);
+    // loop all dst pixels
+    for (y=0;y<ys;y++)
+     for (x=0;x<xs;x++)
+        {
+        // compute position in src
+        fx=x;       // convert to double
+        fy=y;
+        fx-=x0;     // translate to center of rotation
+        fy-=y0;
+        xx=double(+(fx*c)+(fy*s)+x0);   // rotate and translate back
+        yy=double(-(fx*s)+(fy*c)+y0);
+        // copy pixels
+        if ((xx>=0)&&(xx<xs)&&(yy>=0)&&(yy<ys)) pdst[y][x]=psrc[yy][xx];
+         else pdst[y][x]=0; // black
+        }
+    // free memory
+    delete[] psrc;
+    delete[] pdst;
+    }
+*/

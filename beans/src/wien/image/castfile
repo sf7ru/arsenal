@@ -18,9 +18,11 @@ BEAN_DEPEND	:=
 BEAN_FILES	:=	\
 wienimage.c	\
 targa.c		\
+fastread.c	\
 winbmp.c	\
 colordepth.c	\
 vga_default_palette.c \
+vga_default_palette_inv.c	\
 WienImageDraw.cpp	\
 
 

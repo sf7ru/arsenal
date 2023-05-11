@@ -282,7 +282,27 @@ void wienimage_palette_DIB2VGA(PU8      palette,
     for(i = 0; i < (entries * 3); i++)
       *(palette++) >>= 2;
 }
+PVOID wienimage_palette_invert(PVOID      palette)
+{
+    PVOID   result      = nil;
+    PU8     src         = (PU8)palette;
+    PU8     tgt;
+    int     i;
+    U32     entry;
 
+    if ((result = (PU8)MALLOC(256 * 3 + 1)) != nil)
+    {
+        tgt = (PU8)result;
+
+        for (i = 0; i < 256; i++, tgt += 3, src += 3)
+        {
+            entry = *(PU32)src;
+            *(PU32)tgt = ((entry & 0xFF) << 16) | (entry & 0xFF00) | (((entry & 0xFF0000) >> 16));
+        }
+    }
+
+    return result;
+}
 BOOL wienimage_palette_copy(PWIENIMAGE    tgt, 
                             PWIENIMAGE    src)
 {

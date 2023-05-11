@@ -57,6 +57,16 @@ public:
         {
             mDisp->tiltedRect(x, y, width, height, angle, color);
         }
+
+        void            titledDraw              (int            x,
+                                                 int            y,
+                                                 PWIENIMAGE     image,
+                                                 int            cx,
+                                                 int            cy,
+                                                 double         angle)
+        {
+            mDisp->tiltedDraw(x, y, image, cx, cy, angle);
+        }
 };
 
 

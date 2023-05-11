@@ -18,6 +18,8 @@
 #include <customboard.h>
 #include <limits.h>
 #include <stdio.h>
+#include <WienImage.h>
+#include <axmath.h>
 
 // ---------------------------------------------------------------------------
 // ------------------------------- DEFINITIONS -------------------------------
@@ -206,6 +208,13 @@ virtual BOOL            draw                    (PU8 			buff,
                                                  UINT           height,
                                                  int 			transparentColor)
         {return transparentColor != -1 ? drawT(buff,x,y,width,height,transparentColor) : drawNonT(buff,x,y,width,height); }
+
+virtual BOOL            tiltedDraw              (int            x,
+                                                 int            y,
+                                                 PWIENIMAGE     image,
+                                                 int            cx,
+                                                 int            cy,
+                                                 double         angle);
 
         void            update                  ()
         { applyBuffer(0, 0, mWidth, mHeight); validate(); }
