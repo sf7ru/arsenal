@@ -14,6 +14,7 @@
 #include <Mqtt.h>
 #include <string.h>
 #include <stdio.h>
+#include <errno.h>
 
 // ---------------------------------------------------------------------------
 // ------------------------------- DEFINITIONS -------------------------------
@@ -428,7 +429,7 @@ INT Mqtt::turn(PMQTTMESSAGE   msg,
             inBuff.purge(sz);
         }
 
-        if (sz == -1)
+        if ((sz == -1) && (errno != EINPROGRESS))
         {
             perror("Mqtt::receive ");
             result = -1;
