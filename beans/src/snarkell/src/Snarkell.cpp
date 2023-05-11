@@ -34,11 +34,11 @@ int Snarkell::receive(int            timeout)
 
         if (((parseLen = (UINT)strlen(parseOn)) > 0))
         {
+            //if (flags.debug)
+                printf("<< '%s'\n", parseOn);
+
             if (checkCs(parseOn, parseLen))
             {
-                if (flags.debug)
-                    printf("<< '%s'\n", parseOn);
-
                 if ((parseOn = strz_substrs_get_u(parseOn, &parseLen, separator)) != nil)
                 {
                     key = parseOn;
