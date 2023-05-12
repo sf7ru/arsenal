@@ -15,11 +15,12 @@
 // ------------------------------- DEFINITIONS -------------------------------
 // -----|-------------------|-------------------------------------------------
 
-#define DEFAULTVGAPAL_BLACK 0 
-#define DEFAULTVGAPAL_WHITE 15
-#define DEFAULTVGAPAL_RED   40
-#define DEFAULTVGAPAL_BLUE  32
-#define DEFAULTVGAPAL_GREEN 48
+#define DEFAULTVGAPAL_BLACK     0 
+#define DEFAULTVGAPAL_WHITE     15
+#define DEFAULTVGAPAL_RED       40
+#define DEFAULTVGAPAL_BLUE      32
+#define DEFAULTVGAPAL_YELLOW    44
+#define DEFAULTVGAPAL_GREEN     48
 
 #define WIENIMAGE_PALETTE_SZ    (256 * 3)
 

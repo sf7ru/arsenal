@@ -162,7 +162,7 @@ static INT _ssocket_write(PSSOCKDEV     pst_dev,
         }
 
         if (b_do)
-        {
+        {            
             i_sent = send(pst_dev->v_sock, p_data, i_size, 0);
         }
     }
