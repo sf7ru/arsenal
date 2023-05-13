@@ -429,7 +429,7 @@ INT Mqtt::turn(PMQTTMESSAGE   msg,
             inBuff.purge(sz);
         }
 
-        if ((sz == -1) && (errno != EINPROGRESS))
+        if ((sz == -1) && (errno != EINPROGRESS) ) // && (errno != EACCES))
         {
             perror("Mqtt::receive ");
             result = -1;
