@@ -407,9 +407,9 @@ INT Mqtt::turn(PMQTTMESSAGE   msg,
         while ((sz = inBuff.read(TO)) > 0)
         {
             PU8 buff    = (PU8)inBuff.getData();
-            //int was     = sz;
+            int was     = sz;
 
-            //strz_dump("RECV: ", buff, sz);
+            strz_dump("RECV: ", buff, sz);
             lastKA = axtime_get_monotonic();
 
             switch (GET_MESSAGE(buff[0]))
@@ -421,11 +421,12 @@ INT Mqtt::turn(PMQTTMESSAGE   msg,
                 MAC_MSG(PUBACK);
 
                 default:
+                    printf("^^^^ unknown\n");
                     result  = 0;
                     break;
             }
 
-            //printf("sz  = %d, was = %d\n", (int)sz, (int)was);
+            printf("sz  = %d, was = %d\n", (int)sz, (int)was);
             inBuff.purge(sz);
         }
 
