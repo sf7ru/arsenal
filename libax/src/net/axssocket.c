@@ -106,6 +106,10 @@ static INT _ssocket_read(PSSOCKDEV      pst_dev,
                 if (p_data)
                 {
                     i_received = recv(pst_dev->v_sock, p_data, i_to_recv, 0);
+
+                    // if (i_received)
+                    //     strz_dump_w_txt("RAW: ", p_data, i_received);
+
                 }
                 else
                     i_received = i_to_recv;
@@ -121,6 +125,9 @@ static INT _ssocket_read(PSSOCKDEV      pst_dev,
 // ------------------------------ Blocking -----------------------------------
 
         i_received = recv(pst_dev->v_sock, p_data, i_size, 0);
+
+        // if (i_received)
+        //     strz_dump_w_txt("RAW: ", p_data, i_received);
     }
 
     RETURN(i_received);
