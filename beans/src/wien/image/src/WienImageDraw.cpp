@@ -107,6 +107,8 @@ BOOL WienImageDraw::pushBitmap()
 {
     BOOL        result      = false;
 
+    SAFEFREE(mPushedBitmap);
+
     if ((mPushedBitmap = (PU8)strz_memdup(mImage->bitmap, wienimage_get_bitmap_size(mImage))) != nil)
     {
         result = true;
