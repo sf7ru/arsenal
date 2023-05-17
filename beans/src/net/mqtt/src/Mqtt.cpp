@@ -407,7 +407,7 @@ INT Mqtt::turn(PMQTTMESSAGE   msg,
         if ((sz = inBuff.read(TO)) > 0)
         {
             PU8 buff    = (PU8)inBuff.getData();
-            int was     = sz;
+            //int was     = sz;
 
             // strz_dump("RECV: ", buff, sz);
             lastKA = axtime_get_monotonic();
