@@ -43,9 +43,6 @@
                                 (a >=  70 ? "E"  :           \
                                 (a >=  20 ? "NE" : "N"))))))))
 
-#define NORMALIZE_COURSE(c)  (c) += (((c) < 0) ? 360.0 : -360.0)
-
-
 #define DEF_PI                  3.1415926535897932384626433832795
 #define DEF_KNOTSTOKMHFACTOR    1.853       // See http://www.qualimetrics.com/html/reference.html
 #define DEF_KMHTOKNOTSFACTOR    0.540       // See http://www.qualimetrics.com/html/reference.html
