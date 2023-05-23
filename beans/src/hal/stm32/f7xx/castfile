@@ -19,8 +19,8 @@ hal/stm32@arsenal/beans				\
 hal/stm32/CMSISv5@arsenal/beans			\
 hal/stm32/CMSISv5/Device/ST/STM32F7xx@arsenal/beans	\
 hal/stm32/STM32F7xx_HAL_Driver@arsenal/beans	\
-data/buff@arsenal/beans                                                 \
-
+data/buff@arsenal/beans			\
+dev/net/can@arsenal/beans		\
 
 
 
@@ -32,6 +32,7 @@ Stm32f7xxSpi.cpp	\
 Stm32f7xxSys.cpp	\
 Stm32f7xxPwm.cpp	\
 Stm32f7xxEth.cpp 	\
+Stm32f7xxCan.cpp	\
 
 
 BEAN_WILDCARDS	:=      \

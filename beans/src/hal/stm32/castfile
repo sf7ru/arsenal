@@ -32,6 +32,7 @@ Stm32GpioInt.cpp	\
 Stm32Fm.cpp		\
 Stm32Timer.cpp		\
 Stm32Thermal.cpp	\
+Stm32Can.cpp		\
 
 
 
