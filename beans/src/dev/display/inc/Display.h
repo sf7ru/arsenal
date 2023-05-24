@@ -201,13 +201,11 @@ virtual void            tiltedRect              (int            x,
                                                  int            angle,
                                                  UINT           color);
 
-virtual BOOL            draw                    (PU8 			buff,
-                                                 int            x,
+virtual BOOL            draw                    (int            x,
                                                  int            y,
                                                  UINT           width,
                                                  UINT           height,
-                                                 int 			transparentColor)
-        {return transparentColor != -1 ? drawT(buff,x,y,width,height,transparentColor) : drawNonT(buff,x,y,width,height); }
+                                                 PWIENIMAGE     image);
 
 virtual BOOL            tiltedDraw              (int            x,
                                                  int            y,

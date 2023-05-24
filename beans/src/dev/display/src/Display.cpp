@@ -245,6 +245,29 @@ BOOL Display::drawNonT(PU8 			  buff,
 
     return true;
 }
+BOOL Display::draw(int            x,
+                   int            y,
+				   UINT           width,
+				   UINT           height,
+                   PWIENIMAGE     image)
+{
+	BOOL            result 	= false;
+	UINT 			w 		= width ? width : image->width;
+	UINT 			h		= height ? height : image->height;
+	
+	ENTER(true);
+	
+	if (image->transparentColor != -1)
+	{
+		result = drawT((PU8)image->bitmap, x, y, w, h, image->transparentColor);
+	}
+	else
+	{
+		result = drawNonT((PU8)image->bitmap, x, y, w, h); 
+	}
+	
+	RETURN(result);
+}
 BOOL Display::tiltedDraw(int            x1,
 						 int            y1,
 						 PWIENIMAGE     image,

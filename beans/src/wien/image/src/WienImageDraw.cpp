@@ -147,13 +147,13 @@ BOOL WienImageDraw::draw(PWIENIMAGE     image,
     {
         if ((img = wienimage_dither(image, mImage->depth)) != nil)
         {
-            result = mDisp->draw((PU8)img->bitmap, x, y, width ? width : img->width, height ? height : img->height, image->transparentColor);
+            result = mDisp->draw(x, y, width, height, image);
 
             wienimage_destroy(img);
         }
     }
     else
-        result = mDisp->draw((PU8)image->bitmap, x, y, width ? width : image->width, height ? height : image->height, image->transparentColor);
+        result = mDisp->draw(x, y, width, height, image);
 
     return result;
 }
