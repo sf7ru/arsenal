@@ -147,7 +147,7 @@ BOOL WienImageDraw::draw(PWIENIMAGE     image,
     {
         if ((img = wienimage_dither(image, mImage->depth)) != nil)
         {
-            result = mDisp->draw(x, y, width, height, image);
+            result = mDisp->draw(x, y, width, height, img);
 
             wienimage_destroy(img);
         }

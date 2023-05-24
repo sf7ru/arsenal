@@ -74,19 +74,22 @@ static BOOL _dither_1_to_8(PWIENIMAGE tgt,
         if (src->transparentColor)
         {
             color0 = (src->defaultColor != -1) ? src->defaultColor : DEFAULTVGAPAL_BLACK;
+            tgt->defaultColor       = color0;
         }
         else
         {
             color1 = (src->defaultColor != -1) ? src->defaultColor : DEFAULTVGAPAL_WHITE;
+            tgt->defaultColor       = color1;
         }
+
+        tgt->transparentColor   = src->transparentColor;
     }
     else
     {
         color0 = DEFAULTVGAPAL_BLACK;
         color1 = src->defaultColor != -1 ? src->defaultColor : DEFAULTVGAPAL_WHITE;
+        tgt->defaultColor           = src->defaultColor;
     }
-
-    //color = src->defaultColor != -1 ? src->defaultColor : DEFAULTVGAPAL_WHITE;
 
     for (j = 0; j < src->height; j++)
     {

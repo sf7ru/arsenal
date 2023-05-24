@@ -67,6 +67,11 @@ public:
         {
             mDisp->tiltedDraw(x, y, image, cx, cy, angle);
         }
+
+        void            clear                   ()
+        {
+                mDisp->clear(0);
+        }
 };
 
 
