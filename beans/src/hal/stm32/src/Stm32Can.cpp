@@ -35,6 +35,7 @@ typedef struct _tag_MYCANDESC
     CAN_RxHeaderTypeDef     pRxHeader;
     uint8_t                 r;
     CAN_FilterTypeDef       f; //declare CAN filter structure
+    BOOL                    ready;
 } MYCANDESC, * PMYCANDESC;
 
 // ---------------------------------------------------------------------------
@@ -53,15 +54,18 @@ extern "C"
 {
     void CAN1_TX_IRQHandler(void)
     {
-        HAL_CAN_IRQHandler(&descs[0].h);
+        if (descs[0].ready)
+            HAL_CAN_IRQHandler(&descs[0].h);
     }
     void CAN1_RX0_IRQHandler(void)
     {
-        HAL_CAN_IRQHandler(&descs[0].h);
-        HAL_CAN_GetRxMessage(&descs[0].h, CAN_RX_FIFO0, &descs[0].pRxHeader, &descs[0].r);
+        if (descs[0].ready)
+        {
+            HAL_CAN_IRQHandler(&descs[0].h);
+            HAL_CAN_GetRxMessage(&descs[0].h, CAN_RX_FIFO0, &descs[0].pRxHeader, &descs[0].r);
+        }
     }
 }
-
 Can::Can()
 {
     constructClass();
@@ -103,11 +107,14 @@ BOOL Can::init(CANMODE  mode)
             descs[ifaceNo].f.FilterMaskIdLow=0;
             descs[ifaceNo].f.FilterScale=CAN_FILTERSCALE_32BIT; //set filter scale
             descs[ifaceNo].f.FilterActivation=ENABLE;
+            //descs[ifaceNo].f.FilterMode = CAN_FILTERMODE_IDMASK;
 
             HAL_CAN_ConfigFilter(&descs[ifaceNo].h, &descs[ifaceNo].f); //configure CAN filter
+            HAL_CAN_Start(&descs[ifaceNo].h); //start CAN
             HAL_CAN_ActivateNotification(&descs[ifaceNo].h, CAN_IT_RX_FIFO0_MSG_PENDING); //enable interrupts
 
-            result = true;
+            descs[ifaceNo].ready    = true;
+            result                  = true;
         }
     }
 
