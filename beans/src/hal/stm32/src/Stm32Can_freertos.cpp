@@ -38,8 +38,9 @@ typedef struct _tag_MYCANDESC
     CAN_FilterTypeDef       f; //declare CAN filter structure
     CAN_RxHeaderTypeDef     rxHeader;
     U8                      rxData      [ 8 ];
-    BOOL                    received;
-    BOOL                    ready;
+volatile BOOL               received;
+volatile BOOL               ready;
+//    UINT                    lost;
     TaskHandle_t            xTaskToNotify;
 } MYCANDESC, * PMYCANDESC;
 
@@ -63,11 +64,20 @@ static void CAN1_RXN_IRQHandler(int index)
     if (descs[index].ready)
     {
         HAL_CAN_IRQHandler(&descs[index].h);
-        HAL_CAN_GetRxMessage(&descs[index].h, CAN_RX_FIFO0, &descs[index].rxHeader, descs[index].rxData);
 
+        if (!descs[index].received)
+        {
+            HAL_CAN_GetRxMessage(&descs[index].h, CAN_RX_FIFO0, &descs[index].rxHeader, descs[index].rxData);
+
+//            descs[index].lost       = 0;
+            descs[index].received   = true;
+        }
+        // else
+        //     descs[index].lost++;
+
+        // notify anyway
         if ((x = descs[index].xTaskToNotify) != nil)
         {
-            descs[index].received   = true;
             vTaskNotifyGiveFromISR(x, &xHigherPriorityTaskWoken);
             descs[index].xTaskToNotify = nil;
             portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
@@ -188,7 +198,8 @@ INT Can::receive(PCANMESSAGE    msg,
   
         memcpy(msg->data, &descs[ifaceNo].rxData[0], msg->size);
 
-        result = msg->size;
+        descs[ifaceNo].received = false;
+        result                  = msg->size;
     }
 
     return result;
