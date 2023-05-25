@@ -61,19 +61,3 @@ BOOL Can::initBase()
 
     RETURN(result);
 }
-INT Can::read(UINT           reg,
-              PVOID          data,
-              INT            len)
-{
-    INT         result          = -1;
-
-    return result;
-}
-INT Can::write(UINT           reg,
-                    PVOID          data,
-                    INT            len)
-{
-    INT         result          = -1;
-
-    return result;
-}

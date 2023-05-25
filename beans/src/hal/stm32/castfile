@@ -32,8 +32,9 @@ Stm32GpioInt.cpp	\
 Stm32Fm.cpp		\
 Stm32Timer.cpp		\
 Stm32Thermal.cpp	\
-Stm32Can.cpp		\
 
+BEAN_WILDCARDS_CPP  :=      \
+Stm32Can     				\
 
 
 #Stm32SpiSw.cpp		\

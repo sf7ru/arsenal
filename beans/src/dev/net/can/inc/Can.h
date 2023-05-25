@@ -36,6 +36,15 @@ typedef struct __tag_CANMODE
     UINT            baudrateKbps	: 14;
 } CANMODE, * PCANMODE;
 
+
+typedef struct __tag_CANMESSAGE
+{
+    UINT            id;        
+    UINT            size;
+    U8              data                [ 8 ];
+} CANMESSAGE, * PCANMESSAGE;
+
+
 // ---------------------------------------------------------------------------
 // --------------------------------- CLASSES ---------------------------------
 // -----|---------------|-----------------------(|--------------|-------------
@@ -65,16 +74,18 @@ public:
 
         void            deinit                  ();
 
-        INT             read                    (UINT           reg,
-                                                 PVOID          data,
-                                                 INT            len);
+        INT             receive                 (PCANMESSAGE    msg,
+                                                 UINT           TO);
 
-        INT             write                   (UINT           reg,
-                                                 PVOID          data,
-                                                 INT            len);
+        INT             send                    (PCANMESSAGE    msg,
+                                                 UINT           TO);
 
         CANMODE         getMode                 ()
         { return mMode; }
+
+        BOOL            setFilterMask           (U32            id,     
+                                                 U32            mask);
+
 };
 
 #endif // #ifndef __CAN_H__

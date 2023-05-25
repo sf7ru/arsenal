@@ -78,7 +78,6 @@ extern "C"
         }
     }
 };
-
 BOOL Can::initMsp(PVOID         h)
 {
     BOOL                result              = true;
