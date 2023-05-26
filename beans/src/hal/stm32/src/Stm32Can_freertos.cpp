@@ -114,36 +114,42 @@ BOOL Can::init(CANMODE  mode)
 
     ENTER(true);
 
-    mMode = mode;
-
-    if (initBase())
+    if (!descs[ifaceNo].ready)
     {
-        descs[ifaceNo].h.Instance = canDefs[ifaceNo];
+        mMode = mode;
 
-        if (initMsp(&descs[ifaceNo].h))
+        if (initBase())
         {
-            descs[ifaceNo].h.Init.Prescaler = HSI_VALUE / (mMode.baudrateKbps * 1000);
-            descs[ifaceNo].h.Init.Mode = CAN_MODE_NORMAL;
-            descs[ifaceNo].h.Init.SyncJumpWidth = CAN_SJW_1TQ;
-            descs[ifaceNo].h.Init.TimeSeg1 = CAN_BS1_1TQ;
-            descs[ifaceNo].h.Init.TimeSeg2 = CAN_BS2_1TQ;
-            descs[ifaceNo].h.Init.TimeTriggeredMode = DISABLE;
-            descs[ifaceNo].h.Init.AutoBusOff = DISABLE;
-            descs[ifaceNo].h.Init.AutoWakeUp = DISABLE;
-            descs[ifaceNo].h.Init.AutoRetransmission = DISABLE;
-            descs[ifaceNo].h.Init.ReceiveFifoLocked = DISABLE;
-            descs[ifaceNo].h.Init.TransmitFifoPriority = DISABLE;
+            descs[ifaceNo].h.Instance = canDefs[ifaceNo];
 
-            setFilterMask(0, 0);
+            if (initMsp(&descs[ifaceNo].h))
+            {
+                descs[ifaceNo].h.Init.Prescaler = HSI_VALUE / (mMode.baudrateKbps * 1000);
+                descs[ifaceNo].h.Init.Mode = CAN_MODE_NORMAL;
+                descs[ifaceNo].h.Init.SyncJumpWidth = CAN_SJW_1TQ;
+                descs[ifaceNo].h.Init.TimeSeg1 = CAN_BS1_1TQ;
+                descs[ifaceNo].h.Init.TimeSeg2 = CAN_BS2_1TQ;
+                descs[ifaceNo].h.Init.TimeTriggeredMode = DISABLE;
+                descs[ifaceNo].h.Init.AutoBusOff = DISABLE;
+                descs[ifaceNo].h.Init.AutoWakeUp = DISABLE;
+                descs[ifaceNo].h.Init.AutoRetransmission = DISABLE;
+                descs[ifaceNo].h.Init.ReceiveFifoLocked = DISABLE;
+                descs[ifaceNo].h.Init.TransmitFifoPriority = DISABLE;
 
-            HAL_CAN_Start(&descs[ifaceNo].h);
-            HAL_CAN_ActivateNotification(&descs[ifaceNo].h, CAN_IT_RX_FIFO0_MSG_PENDING);
+                if (HAL_CAN_Init(&descs[ifaceNo].h) == HAL_OK)
+                {
+                    setFilterMask(0, 0);
 
-            descs[ifaceNo].ready    = true;
-            result                  = true;
+                    HAL_CAN_Start(&descs[ifaceNo].h);
+                    HAL_CAN_ActivateNotification(&descs[ifaceNo].h, CAN_IT_RX_FIFO0_MSG_PENDING);
+
+                    descs[ifaceNo].ready    = true;
+                    result                  = true;
+                }
+            }
         }
     }
-
+    
     RETURN(result);
 }
 BOOL Can::setFilterMask(U32     id,

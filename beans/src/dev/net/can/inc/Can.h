@@ -32,7 +32,7 @@
 
 typedef struct __tag_CANMODE
 {
-    UINT            reserved            : 1;
+    UINT            reserved        : 18;
     UINT            baudrateKbps	: 14;
 } CANMODE, * PCANMODE;
 
