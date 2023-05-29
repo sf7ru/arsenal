@@ -39,7 +39,9 @@ typedef struct _tag_MYCANDESC
     CAN_HandleTypeDef       h;
     CAN_FilterTypeDef       f; //declare CAN filter structure
     CAN_RxHeaderTypeDef     rxHeader;
-    U8                      rxData      [ 8 ];
+    U8                      rxData     [ 8 ];
+    CAN_RxHeaderTypeDef     rxHeaderTmp;
+    U8                      rxDataTmp  [ 8 ];
 volatile BOOL               received;
 volatile BOOL               ready;
 //    UINT                    lost;
@@ -60,9 +62,6 @@ static  CAN_TypeDef *       canDefs         [ CAN_MAX_IFACES ] = { CAN1, CAN2 };
 
 static void CAN1_RXN_IRQHandler(int index)
 {
-    CAN_RxHeaderTypeDef     rxHeader;
-    U8                      rxData      [ 8 ];
-
     BaseType_t      xHigherPriorityTaskWoken    = pdFALSE;
     TaskHandle_t    x;
 
@@ -70,12 +69,12 @@ static void CAN1_RXN_IRQHandler(int index)
     {
         HAL_CAN_IRQHandler(&descs[index].h);
 
-        HAL_CAN_GetRxMessage(&descs[index].h, CAN_RX_FIFO0, &descs[index].rxHeader, descs[index].rxData);
+        HAL_CAN_GetRxMessage(&descs[index].h, CAN_RX_FIFO0, &descs[index].rxHeaderTmp, descs[index].rxDataTmp);
 
         if (!descs[index].received)
         {
-            memcpy(&descs[index].rxHeader, &rxHeader, sizeof(rxHeader));
-            memcpy(&descs[index].rxData[0], &rxData[0], sizeof(rxData));
+            memcpy(&descs[index].rxHeader, &descs[index].rxHeaderTmp, sizeof(descs[index].rxHeader));
+            memcpy(&descs[index].rxData[0], &descs[index].rxDataTmp[0], sizeof(descs[index].rxData));
             descs[index].received = true;
         }
         
@@ -203,7 +202,7 @@ INT Can::receive(PCANMESSAGE    msg,
 {
     INT         result          = 0;
 
-    if (!descs[ifaceNo].received)
+    if (!descs[ifaceNo].received && TO)
     {
         descs[ifaceNo].xTaskToNotify = xTaskGetCurrentTaskHandle();
         ulTaskNotifyTake(pdTRUE, TO);
@@ -218,8 +217,8 @@ INT Can::receive(PCANMESSAGE    msg,
   
         memcpy(msg->data, &descs[ifaceNo].rxData[0], msg->size);
 
-        descs[ifaceNo].received = false;
         result                  = msg->size;
+        descs[ifaceNo].received = false;
     }
 
     return result;
