@@ -213,11 +213,11 @@ INT Can::receive(PCANMESSAGE    msg,
         CAN_RxHeaderTypeDef *    h = &descs[ifaceNo].rxHeader;
 
         msg->id     = (h->IDE == CAN_ID_EXT) ? h->ExtId : h->StdId;
-        msg->size   = MAC_MAX(h->DLC, 8);
+        msg->dlc    = MAC_MAX(h->DLC, 8);
   
-        memcpy(msg->data, &descs[ifaceNo].rxData[0], msg->size);
+        memcpy(msg->data, &descs[ifaceNo].rxData[0], msg->dlc);
 
-        result                  = msg->size;
+        result                  = msg->dlc;
         descs[ifaceNo].received = false;
     }
 
