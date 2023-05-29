@@ -15,8 +15,10 @@
 
 #if (defined(HAL_CAN_MODULE_ENABLED))
 
+
 #include <Can.h>
 #include <stdint.h>
+#include <string.h>
 #include <cmsis_os.h>
 #include <string.h>
 
@@ -58,6 +60,9 @@ static  CAN_TypeDef *       canDefs         [ CAN_MAX_IFACES ] = { CAN1, CAN2 };
 
 static void CAN1_RXN_IRQHandler(int index)
 {
+    CAN_RxHeaderTypeDef     rxHeader;
+    U8                      rxData      [ 8 ];
+
     BaseType_t      xHigherPriorityTaskWoken    = pdFALSE;
     TaskHandle_t    x;
 
@@ -65,16 +70,14 @@ static void CAN1_RXN_IRQHandler(int index)
     {
         HAL_CAN_IRQHandler(&descs[index].h);
 
+        HAL_CAN_GetRxMessage(&descs[index].h, CAN_RX_FIFO0, &descs[index].rxHeader, descs[index].rxData);
+
         if (!descs[index].received)
         {
-            HAL_CAN_GetRxMessage(&descs[index].h, CAN_RX_FIFO0, &descs[index].rxHeader, descs[index].rxData);
-
-//            descs[index].lost       = 0;
-            descs[index].received   = true;
+            memcpy(&descs[index].rxHeader, &rxHeader, sizeof(rxHeader));
+            memcpy(&descs[index].rxData[0], &rxData[0], sizeof(rxData));
         }
-        // else
-        //     descs[index].lost++;
-
+        
         // notify anyway
         if ((x = descs[index].xTaskToNotify) != nil)
         {
