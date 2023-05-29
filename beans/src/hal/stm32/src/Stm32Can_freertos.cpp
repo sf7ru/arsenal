@@ -76,6 +76,7 @@ static void CAN1_RXN_IRQHandler(int index)
         {
             memcpy(&descs[index].rxHeader, &rxHeader, sizeof(rxHeader));
             memcpy(&descs[index].rxData[0], &rxData[0], sizeof(rxData));
+            descs[index].received = true;
         }
         
         // notify anyway
