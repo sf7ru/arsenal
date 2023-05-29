@@ -39,7 +39,8 @@ typedef struct __tag_CANMODE
 
 typedef struct __tag_CANMESSAGE
 {
-    UINT            id;        
+    BOOL            ext;
+    U32             id;        
     UINT            dlc;
     U8              data                [ 8 ];
 } CANMESSAGE, * PCANMESSAGE;

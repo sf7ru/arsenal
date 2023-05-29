@@ -230,10 +230,19 @@ INT Can::send(PCANMESSAGE    msg,
     CAN_TxHeaderTypeDef TxHeader        = { 0 };
     uint32_t            TxMailbox;
 
-    TxHeader.IDE = CAN_ID_STD;
-    TxHeader.StdId = msg->id;
-    TxHeader.RTR = CAN_RTR_DATA;
-    TxHeader.DLC = msg->dlc;
+    if (msg->ext)
+    {
+        TxHeader.IDE    = CAN_ID_EXT;
+        TxHeader.ExtId  =  msg->id;
+    }
+    else
+    {
+        TxHeader.IDE = CAN_ID_STD;
+        TxHeader.StdId = msg->id;
+    }
+    
+    TxHeader.RTR    = CAN_RTR_REMOTE;
+    TxHeader.DLC    = msg->dlc;
     TxHeader.TransmitGlobalTime = DISABLE;
 
     if (HAL_CAN_GetTxMailboxesFreeLevel(&descs[ifaceNo].h) > 0)
