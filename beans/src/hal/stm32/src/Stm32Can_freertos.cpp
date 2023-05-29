@@ -124,17 +124,17 @@ BOOL Can::init(CANMODE  mode)
 
             if (initMsp(&descs[ifaceNo].h))
             {
-                descs[ifaceNo].h.Init.Prescaler = HSI_VALUE / (mMode.baudrateKbps * 1000);
+                descs[ifaceNo].h.Init.Prescaler = 54; // WRONG - HSI_VALUE / (mMode.baudrateKbps * 1000);
                 descs[ifaceNo].h.Init.Mode = CAN_MODE_NORMAL;
                 descs[ifaceNo].h.Init.SyncJumpWidth = CAN_SJW_1TQ;
-                descs[ifaceNo].h.Init.TimeSeg1 = CAN_BS1_1TQ;
+                descs[ifaceNo].h.Init.TimeSeg1 = CAN_BS1_6TQ;
                 descs[ifaceNo].h.Init.TimeSeg2 = CAN_BS2_1TQ;
                 descs[ifaceNo].h.Init.TimeTriggeredMode = DISABLE;
-                descs[ifaceNo].h.Init.AutoBusOff = DISABLE;
+                descs[ifaceNo].h.Init.AutoBusOff = ENABLE;
                 descs[ifaceNo].h.Init.AutoWakeUp = DISABLE;
-                descs[ifaceNo].h.Init.AutoRetransmission = DISABLE;
+                descs[ifaceNo].h.Init.AutoRetransmission = ENABLE;
                 descs[ifaceNo].h.Init.ReceiveFifoLocked = DISABLE;
-                descs[ifaceNo].h.Init.TransmitFifoPriority = DISABLE;
+                descs[ifaceNo].h.Init.TransmitFifoPriority = ENABLE;
 
                 if (HAL_CAN_Init(&descs[ifaceNo].h) == HAL_OK)
                 {
@@ -159,23 +159,33 @@ BOOL Can::setFilterMask(U32     id,
     
     ENTER(true);
     
-    descs[ifaceNo].f.FilterBank             = 0;
-
-    descs[ifaceNo].f.FilterFIFOAssignment   = CAN_FILTER_FIFO0;
-    descs[ifaceNo].f.FilterScale            = CAN_FILTERSCALE_32BIT;
-    descs[ifaceNo].f.FilterActivation       = ENABLE;
-    descs[ifaceNo].f.FilterMode             = CAN_FILTERMODE_IDMASK;
-    descs[ifaceNo].f.FilterScale            = CAN_FILTERSCALE_32BIT;
-    descs[ifaceNo].f.FilterIdHigh           = id << 5;
-    descs[ifaceNo].f.FilterIdLow            = 0x0000;
-    descs[ifaceNo].f.FilterMaskIdHigh       = mask << 5;
-    descs[ifaceNo].f.FilterMaskIdLow        = 0x0000;
-    descs[ifaceNo].f.FilterFIFOAssignment   = CAN_RX_FIFO0;
-    descs[ifaceNo].f.FilterActivation       = ENABLE;
-
-    if (HAL_CAN_ConfigFilter(&descs[ifaceNo].h, &descs[ifaceNo].f) == HAL_OK)
+    switch (ifaceNo)
     {
-        result = true;
+        case 0:
+            descs[ifaceNo].f.FilterBank             = 0;
+
+            descs[ifaceNo].f.FilterFIFOAssignment   = CAN_FILTER_FIFO0;
+            descs[ifaceNo].f.FilterBank             = 0;
+            descs[ifaceNo].f.FilterScale            = CAN_FILTERSCALE_32BIT;
+            descs[ifaceNo].f.FilterActivation       = ENABLE;
+            descs[ifaceNo].f.FilterMode             = CAN_FILTERMODE_IDMASK;
+            descs[ifaceNo].f.FilterScale            = CAN_FILTERSCALE_32BIT;
+            descs[ifaceNo].f.FilterIdHigh           = id << 5;
+            descs[ifaceNo].f.FilterIdLow            = 0x0000;
+            descs[ifaceNo].f.FilterMaskIdHigh       = mask << 5;
+            descs[ifaceNo].f.FilterMaskIdLow        = 0x0000;
+            descs[ifaceNo].f.FilterFIFOAssignment   = CAN_RX_FIFO0;
+            descs[ifaceNo].f.FilterActivation       = ENABLE;
+            result                                  = true;
+            break;
+        
+        default:
+            break;
+    }
+
+    if (result && (HAL_CAN_ConfigFilter(&descs[ifaceNo].h, &descs[ifaceNo].f) != HAL_OK))
+    {
+        result = false;
     }
         
     RETURN(result);
