@@ -226,7 +226,23 @@ INT Can::receive(PCANMESSAGE    msg,
 INT Can::send(PCANMESSAGE    msg,
               UINT           TO)
 {
-    INT         result          = -1;
+    INT                 result          = -1;
+    CAN_TxHeaderTypeDef TxHeader        = { 0 };
+    uint32_t            TxMailbox;
+
+    TxHeader.IDE = CAN_ID_STD;
+    TxHeader.StdId = msg->id;
+    TxHeader.RTR = CAN_RTR_DATA;
+    TxHeader.DLC = msg->dlc;
+    TxHeader.TransmitGlobalTime = DISABLE;
+
+    if (HAL_CAN_GetTxMailboxesFreeLevel(&descs[ifaceNo].h) > 0)
+    {
+        if (HAL_CAN_AddTxMessage(&descs[ifaceNo].h, &TxHeader, msg->data, &TxMailbox) == HAL_OK) 
+        {
+            result = true;
+        }
+    }
 
     return result;
 }
