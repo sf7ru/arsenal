@@ -241,7 +241,7 @@ INT Can::send(PCANMESSAGE    msg,
         TxHeader.StdId = msg->id;
     }
     
-    TxHeader.RTR    = CAN_RTR_REMOTE;
+    TxHeader.RTR    = CAN_RTR_DATA;
     TxHeader.DLC    = msg->dlc;
     TxHeader.TransmitGlobalTime = DISABLE;
 
