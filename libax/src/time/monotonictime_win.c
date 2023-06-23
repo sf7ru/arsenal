@@ -59,7 +59,8 @@ AXTIME axtime_get_monotonic(void)
 
     // TODO: DWORD WINAPI GetTickCount(void); in milliseconds, owerlaps every 50 days
 
-    v_time  = time(NULL) * 1000;
+    v_time  = GetTickCount();
+
 
     RETURN(v_time);
 }
