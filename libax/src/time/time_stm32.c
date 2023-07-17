@@ -9,6 +9,8 @@
 #define KOEF            1.0
 #endif
 
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
 void axudelay(UINT to)
 {
     uint32_t cd = (to * LOOPS_1US * KOEF);
@@ -25,6 +27,7 @@ void axudelay(UINT to)
         __ASM volatile ("NOP");
     }
 }
+#pragma GCC pop_options
 
 //static char initialized = 0;
 //
