@@ -16,6 +16,7 @@
 // -----|-------------------|-------------------------------------------------
 
 #define DEFAULTVGAPAL_BLACK     0 
+#define DEFAULTVGAPAL_MAGENTA   13
 #define DEFAULTVGAPAL_WHITE     15
 #define DEFAULTVGAPAL_RED       40
 #define DEFAULTVGAPAL_BLUE      32

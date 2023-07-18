@@ -68,6 +68,15 @@ public:
             mDisp->tiltedDraw(x, y, image, cx, cy, angle);
         }
 
+        void            box                     (int            x,
+                                                 int            y,
+                                                 UINT           width,
+                                                 UINT           height,
+                                                 UINT           color)
+        {
+            mDisp->box(x, y, x + width, y + height, color);
+        }
+
         void            clear                   ()
         {
                 mDisp->clear(0);
