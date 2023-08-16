@@ -74,7 +74,7 @@ public:
                                                  UINT           height,
                                                  UINT           color)
         {
-            mDisp->box(x, y, x + width, y + height, color);
+            mDisp->box(x, y, width, height, color);
         }
 
         void            clear                   ()
