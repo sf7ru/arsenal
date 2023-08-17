@@ -44,6 +44,13 @@ PMODBUSREQ ModbusClient::readReq(UINT           TO)
             lastRecvSize = fsz;
 
             //strz_dump_w_txt("GOT: ", result, fsz);
+
+            if (myAddr != result->addr)
+            {
+                freeReq();
+
+                result = nil;
+            }
         }
         else
         {

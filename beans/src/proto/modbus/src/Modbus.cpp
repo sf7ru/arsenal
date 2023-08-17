@@ -179,5 +179,10 @@ void Modbus::switchToReceiving()
     else
         hal->gpio.setPin(pinReDe, 0);
 }
-
+void Modbus::sendTest()
+{
+    switchToTransmitting();
+    serial.write("MODBUS TEST STRING\n", 19 , MODBUS_TO);
+    switchToReceiving();
+}
 

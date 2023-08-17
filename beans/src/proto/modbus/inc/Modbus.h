@@ -33,6 +33,9 @@
 #define MODBUS_FN_RD_AI     0x04    // Read analog input
 
 #define MODBUS_FN_WR_DO     0x05    // Write digatal output / Force Single Coil
+#define MODBUS_FN_WR_AO     0x06    // Write analog output / Read Holding Registers
+#define MODBUS_FN_WR_MD     0x0F    // Write multiple coils
+#define MODBUS_FN_WR_MA     0x10    // Write multiple holding registers
 
 #define MODBUS_INBUF_SZ     128
 #define MODBUS_OUTBUF_SZ    128
@@ -114,6 +117,9 @@ virtual                 ~Modbus                 ();
                                                  UINT           port,
                                                  UINT           baudrate,
                                                  SERIALTYPE     type  = SERIALTYPE_primary);
+
+        void            sendTest                ();
+
 };
 
 class ModbusMaster: public Modbus
@@ -197,9 +203,12 @@ public:
         BOOL            reportAi                (PVOID          data,
                                                  UINT           size)
         { return report(MODBUS_FN_RD_AI, data, size); }
+
+        BOOL            reportAo                (PVOID          data,
+                                                 UINT           size)
+        { return report(MODBUS_FN_RD_AO, data, size); }
 //        BOOL            sendEcho                ()
 //        { return serial.write(inBuff.getData(), lastRecvSize , MODBUS_TO) > 0; }
-
 };
 
 #endif // __MODBUS_H__
