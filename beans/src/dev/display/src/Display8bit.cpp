@@ -155,7 +155,7 @@ void Display8bit::box(int            x1,
 
     for (int y = y1; y < y2; y++)
     {
-        pBuffer = &mBuffer[(y * mPitch) + (x1 / 2)]; // starting point also
+        pBuffer = &mBuffer[(y * mPitch)]; // starting point also
         for (int x = x1; x < x2; x++)
         {
             pBuffer = setPixel(x, pBuffer, ucColor);
