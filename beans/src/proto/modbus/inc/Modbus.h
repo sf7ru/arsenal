@@ -70,6 +70,13 @@ typedef AXPACKED(struct) __tag_MODBUSREP
     U8                      data [ 1 ];
 } MODBUSREP, * PMODBUSREP;
 
+typedef AXPACKED(struct) __tag_MODBUSRESP
+{
+    U8                      addr;
+    U8                      func;
+    U16                     reg;
+    U8                      data [ 1 ];
+} MODBUSRESP, * PMODBUSRESP;
 
 
 // ---------------------------------------------------------------------------
@@ -166,6 +173,12 @@ class ModbusClient: public Modbus
                                                  PVOID          data,
                                                  UINT           size);
 
+        BOOL            response                (UINT           fn,
+                                                 UINT           reg,
+                                                 PVOID          data,
+                                                 UINT           size);
+
+
 public:
         ModbusClient            ();
         ~ModbusClient            ();
@@ -207,6 +220,12 @@ public:
         BOOL            reportAo                (PVOID          data,
                                                  UINT           size)
         { return report(MODBUS_FN_RD_AO, data, size); }
+
+        BOOL            respAo                  (UINT           reg,
+                                                 PVOID          data,
+                                                 UINT           size)
+        { return response(MODBUS_FN_WR_AO, reg, data, size); }
+
 //        BOOL            sendEcho                ()
 //        { return serial.write(inBuff.getData(), lastRecvSize , MODBUS_TO) > 0; }
 };

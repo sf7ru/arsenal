@@ -86,6 +86,30 @@ BOOL ModbusClient::report(UINT          fn,
 
     RETURN(result);
 }
+BOOL ModbusClient::response(UINT          fn,
+                            UINT          reg,
+                            PVOID         data,
+                            UINT          size)
+{
+    PMODBUSRESP resp            = (PMODBUSRESP)outBuffData;
+    BOOL        result          = false;
+    UINT        payloadSize     = sizeof(MODBUSRESP) - 1 + size;
+
+    ENTER(true);
+
+    resp->addr = (U8)myAddr;
+    resp->func = (U8)fn;
+    resp->reg  = (U16)MAC_BE_WORD(reg);
+    memcpy(&resp->data[0], data, size);
+
+    addCs(resp, payloadSize);
+
+    switchToTransmitting();
+    serial.write(resp, payloadSize + MODBUS_CS_SIZE, MODBUS_TO);
+    switchToReceiving();
+
+    RETURN(result);
+}
 //BOOL ModbusClient::request(UINT           addr,
 //                           UINT           func,
 //                           UINT           reg,
