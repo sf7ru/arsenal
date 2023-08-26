@@ -33,7 +33,6 @@ void Display1bit::print(PFONTFV1       font,
     unsigned char   ucMask;
     unsigned char   c;
     unsigned char*  src;
-    unsigned char*  dest;
 
     U8      cx      = font->width;
     U8*     pFont   = (PU8)(font + 1);
@@ -67,7 +66,6 @@ void Display1bit::print(PFONTFV1       font,
         if (iFontOff >= 0)
         {
             src    = &pFont[iFontOff];
-            dest   = &mBuffer[(y * mPitch) + (x / 2)];
             ucMask = 1;
 
             for (ty = 0; ty < font->height; ty++)
@@ -77,28 +75,16 @@ void Display1bit::print(PFONTFV1       font,
                     src += font->width;
                     ucMask = 1;
                 }
-                for (tx=0; tx<cx; tx+=2)
+                for (tx=0; tx<cx; tx++)
                 {
                     if (src[tx] & ucMask) // foreground
                     {
-                        dest[0] &= 0xf;
-                        dest[0] |= (color << 4);
+                        setPixel(x + tx, y + ty, color);
                     }
-                    if (src[tx+1] & ucMask)
-                    {
-                        dest[0] &= 0xf0;
-                        dest[0] |= color;
-                    }
-                    dest++;
                 }
                 ucMask <<= 1;
 
-                dest -= cx / 2;
-                if (cx & 1)
-                    dest--;
-
-                dest += mPitch; // move to next line
-            } // for ty
+            }
             x += cx;
         }
 
