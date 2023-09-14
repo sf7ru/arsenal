@@ -307,11 +307,6 @@ static void _fileway_msg(PFILEWAY       pst_way,
                 }
             }
 
-            if (pst_way->u_flags & AXLOGFL_CONSOLE)
-            {
-                printf("%s%s\n", sz_stamp, psz_start);
-            }
-
             fprintf(pst_way->pst_file, "%s%s\n", sz_stamp, psz_start);
 
             psz_start = psz_end;

@@ -103,7 +103,8 @@ static void _TAGWAY_msg(PTAGWAY      way,
 
     if (fway)
     {
-        if (way->flags & AXLOGFL_CONSOLE)
+        if ( (way->flags & AXLOGFL_CONSOLE)                                 || 
+             ((way->flags & AXLOGFL_ICONSOLE) && (v_tag <= AXLOGDL_info))   )
         {
             printf("%s\n", psz_msg);
         }

@@ -25,6 +25,7 @@
 #define AXLOGFL_DATEDIR         0x0004
 #define AXLOGFL_STAMP           0x0008
 #define AXLOGFL_SHARED          0x0010
+#define AXLOGFL_ICONSOLE        0x4000
 #define AXLOGFL_CONSOLE         0x8000
 #define AXLOGFL_DEFAULT         (AXLOGFL_STAMP)
 
