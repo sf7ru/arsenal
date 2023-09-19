@@ -203,9 +203,14 @@ HAXHANDLE           dbglink_satellite_close     (HAXHANDLE          handle);
 INT                 dbglink_satellite_send      (HAXHANDLE          handle,
                                                  PVOID              msg,
                                                  INT                size);
-
+// DEBUG
 void                applog                      (PCSTR              message,
                                                  ...);
+
+// INFO
+void                applogi                     (PCSTR              message,
+                                                 ...);
+
 
 #ifdef __cplusplus
 }
