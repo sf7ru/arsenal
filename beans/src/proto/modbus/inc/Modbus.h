@@ -127,6 +127,10 @@ virtual                 ~Modbus                 ();
 
         void            sendTest                ();
 
+
+        void            setAddr                 (U8             newAddr)
+        { myAddr = newAddr; }
+
 };
 
 class ModbusMaster: public Modbus

@@ -45,7 +45,7 @@ PMODBUSREQ ModbusClient::readReq(UINT           TO)
 
             //strz_dump_w_txt("GOT: ", result, fsz);
 
-            if (myAddr != result->addr)
+            if ((result->addr != 0) && (myAddr != result->addr))
             {
                 freeReq();
 

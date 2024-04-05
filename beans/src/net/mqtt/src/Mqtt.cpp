@@ -493,10 +493,12 @@ INT Mqtt::publish(PCSTR          topic,
             memcpy(outBuff + headerLen + utf_topicSize, msg, msgLen);
 
             result = axdev_write(sock, outBuff, packetLen, TO) == packetLen;
+
+            applog("MQTT publish: 's' '%s' send result = %d\n", topic, msg, result);
         }
         else
         {
-            printf("MQTT packet too long  %d vs %d max\n", packetLen, MQTT_BUFF_SIZE);
+            applog("MQTT publish: packet too long  %d vs %d max\n", packetLen, MQTT_BUFF_SIZE);
         }
     }
     else
