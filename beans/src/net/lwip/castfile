@@ -11,7 +11,7 @@
 ##      $Log:$
 ## ***************************************************************************
 
-BEAN_NAME	:= lwip@arsenal/beans
+BEAN_NAME	:= net/lwip@arsenal/beans
 
 BEAN_DEPEND	:= freertos10/cmsis_os@arsenal/beans
 
