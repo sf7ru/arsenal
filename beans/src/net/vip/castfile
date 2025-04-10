@@ -1,0 +1,38 @@
+## ***************************************************************************
+## TITLE
+##      Cast file
+## PROJECT
+##      Arsenal Library
+## ***************************************************************************
+##
+## FILE
+##      $Id:$
+## HISTORY
+##      $Log:$
+## ***************************************************************************
+
+BEAN_NAME	:= net/vip@arsenal/beans
+
+BEAN_DEPEND	:=	
+
+BEAN_FILES	:=	\
+SnEth.cpp  		\
+SnIp.cpp  		\
+SnPpp.cpp  		\
+SnPacket.cpp		\
+SnArp.cpp		\
+fcs16.c			\
+
+#SnTest.cpp		\
+
+
+TO_PORT		:=	\
+SnTcp.cpp  		\
+SnTcp_rcv.cpp  		\
+SnTcp_snd.cpp		\
+
+
+
+
+include $(PATH_MAKEFILES)/Castfile
+
